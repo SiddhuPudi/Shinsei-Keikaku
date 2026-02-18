@@ -1,0 +1,27 @@
+.app-container {
+  height: 100vh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #00cfff;
+  text-shadow: 0 0 8px #00cfff, 0 0 16px #00a4cc;
+  margin: 0;
+}
+
+.subtitle {
+  color: #ffffffcc;
+  margin-top: 10px;
+  font-size: 1.2 rem;
+  letter-spacing: 1px;
+}
+
+.page-container {
+  padding-top: 70px;
+}

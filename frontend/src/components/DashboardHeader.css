@@ -1,0 +1,36 @@
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    gap:14px;
+    margin-bottom: 28px;
+    animation: fadein 0.7s ease;
+}
+
+.dashboard-logo-box {
+   width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff3cac, #a955ff, #00cfff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 60, 172, 0.6), 0 0 14px rgba(169, 85, 255, 0.6), 0 0 18px rgba(0, 207, 255, 0.6);
+}
+
+.dashboard-logo-kanji {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #000000dd;
+}
+
+.dashboard-header-text h2 {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: white;
+}
+
+.dashboard-header-text p {
+    margin-top: -2px;
+    color: #8be8ff;
+    font-size: 0.95rem;
+}

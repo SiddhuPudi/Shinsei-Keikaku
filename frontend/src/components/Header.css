@@ -1,0 +1,136 @@
+.nav-container {
+    width: 100%;
+    height: 70px;
+    background: rgba(5, 8, 20, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.logo-box {
+    width: 35px;
+    height: 35px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff3cac, #a955ff, #00cfff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 60, 172, 0.6), 0 0 14px rgba(169, 85, 255, 0.6), 0 0 18px rgba(0, 207, 255, 0.6);
+
+}
+
+.logo-kanji {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #000000dd;
+}
+
+.nav-title {
+    background: linear-gradient(135deg, #ff3cac, #a955ff, #00cfff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-shadow:  0 0 25px rgba(255, 60, 172, 0.6), 0 0 33px rgba(169, 85, 255, 0.6), 0 0 40px rgba(0, 207, 255, 0.6);
+}
+
+.nav-title:hover {
+    transform: scale(1.01);
+}
+
+.nav-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.05rem;
+    transition: 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: #00cfff;
+    text-shadow: 0 0 8px #00cfff;
+    transform: scale(1.1);
+}
+
+.nav-right {
+    display: flex;
+    gap: 10px;
+}
+
+.account-btn {
+    padding: 6px 14px;
+    border: 1px solid #00cfff;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #00cfff, #a955ff);
+    font-size: 0.9rem;
+    transition: 0.2s ease-in-out;
+    font-weight: 500;
+    box-shadow: 0 0 8px #00cfff, 0 0 8px #00cfff;
+    text-decoration: none;
+}
+
+.account-btn:hover {
+    transform: scale(1.05);
+}
+
+.nav-username {
+    margin-right: 8px;
+    font-size: 0.95rem;
+    color: #e5e7eb;
+    opacity: 0.9;
+    padding: 4px 5px;
+}
+
+.logout-btn {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid #ef4444;
+    background: transparent;
+    color: #fecaca;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.18);
+    color: #fee2e2;
+}
+
+@media (max-width: 900px) {
+    .nav-container {
+        justify-content: space-between;
+    }
+
+    .nav-links {
+        position: static;
+        transform: none;
+        margin: 0 auto;
+    }
+}

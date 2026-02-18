@@ -1,0 +1,194 @@
+/* Before Login */
+
+.hero-container {
+    height: 100vh;
+    width: 100%;
+    background: radial-gradient(circle at 50% 0%, rgba(0, 200, 255, 0.18), rgba(0, 0, 0, 1) 75%);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-40px);
+}
+
+.hero-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    padding: 45px 70px;
+    border-radius: 22px;
+    box-shadow: 0 0 35px rgba(0, 255, 255, 0.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    animation: fade-in 0.7s ease;
+}
+
+.home-logo-box {
+    width: 65px;
+    height: 65px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #ff3cac, #a955ff, #00cfff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 60, 172, 0.6), 0 0 14px rgba(169, 85, 255, 0.6), 0 0 18px rgba(0, 207, 255, 0.6);
+    margin-bottom: 10px;
+}
+
+.home-logo-kanji {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000000dd;
+}
+
+
+.hero-title {
+    background: linear-gradient(135deg, #ff3cac, #a955ff, #00cfff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 3.4rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom:5px;
+    text-shadow:  0 0 25px rgba(255, 60, 172, 0.6), 0 0 33px rgba(169, 85, 255, 0.6), 0 0 40px rgba(0, 207, 255, 0.6);
+}
+
+.hero-title-glow {
+    text-shadow: 0 0 25px rgba(0, 200, 255, 0.6), 0 0 40px rgba(0, 200, 255, 0.4);
+}
+
+.hero-subtitle {
+    color: #8be8ff;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.hero-btns {
+    display: flex;
+    gap: 20px;
+}
+
+.hero-btn {
+    padding: 12px 26px;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.signin-btn {
+    background: linear-gradient(135deg, #00cfff, #a955ff);
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.4);
+    color: #fff;
+}
+
+.signin-btn:hover {
+    background: linear-gradient(135deg, #00e4ff, #c27bff);
+    box-shadow: 0 0 22px rgba(0, 200, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.signup-btn {
+    background: linear-gradient(135deg, #ff6a00, #ee0979);
+    box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
+    color: #fff;
+}
+
+.signup-btn:hover {
+    background: linear-gradient(135deg, #ff8500, #ff1e9b);
+    box-shadow: 0 0 22px rgba(255, 106, 0, 0.5);
+    transform: scale(1.05);
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* After Login */
+
+.dashboard-container {
+    min-height: 100vh;
+    padding: 100px 60px 40px;
+    background: radial-gradient(circle at 0% 0%, rgba(0, 200, 255, 0.16), transparent 55%), radial-gradient(circle at 100% 100%, rgba(169, 85, 255, 0.14), transparent 55%), linear-gradient(to bottom, #020617, #020617 40%, #020617 100%);
+    color: #fff;
+}
+
+.dashboard-main {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+    position: relative;
+}
+
+.dashboard-main::before {
+    content: "";
+    position: absolute;
+    top: 6%;
+    bottom: 6%;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(0, 200, 255, 0), rgba(0, 200, 255, 0.35), rgba(169, 85,255, 0.2), rgba(0, 200, 255, 0));
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.dashboard-left, .dashboard-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.quick-explore-container, .player-status-container {
+    height: 100%;
+    flex: 1;
+}
+
+.quick-explore-container {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    padding: 22px 24px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.65);
+    animation: fade-in 0.7s ease;
+}
+
+.quick-title {
+    font-size: 1.5rem;
+    color: #8be8ff;
+    margin-bottom: 25px;
+}
+
+@media (max-width: 700px) {
+    .hero-container {
+        transform: none;
+        padding-top: 90px;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 900px) {
+    .dashboard-container {
+        padding: 90px 16px 24px;
+    }
+
+    .dashboard-main {
+        flex-direction: column;
+    }
+
+    .dashboard-main::before {
+        display: none;
+    }
+}
