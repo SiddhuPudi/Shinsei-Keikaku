@@ -1,0 +1,423 @@
+.monthly-page {
+    min-height: 100vh;
+    padding: 40px 60px 60px;
+    color: #e5e7eb;
+    background: radial-gradient(circle at 10% 0%, rgba(0, 200, 255, 0.18), transparent 55%),
+        radial-gradient(circle at 90% 100%, rgba(169, 85, 255, 0.16), transparent 55%),
+        #020617;
+}
+
+.monthly-header {
+    text-align: center;
+    margin-bottom: 32px;
+    margin-top: -10px;
+}
+
+.monthly-header h1 {
+    font-size: 2.6rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #ff3cac, #a955ff, #2b86c5);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.monthly-header p {
+    color: #8be8ff;
+    margin-top: 6px;
+    font-size: 1rem;
+}
+
+/* Tabs */
+.monthly-tabs {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.monthly-tab {
+    padding: 10px 28px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    background: transparent;
+    color: #e5e7eb;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.monthly-tab:hover {
+    border-color: #38bdf8;
+    color: #38bdf8;
+}
+
+.monthly-tab.active {
+    background: linear-gradient(135deg, #00cfff, #a855f7);
+    color: #020617;
+    border-color: transparent;
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.45);
+}
+
+/* Stats Row */
+.monthly-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 26px;
+    animation: mo-enter 0.45s ease forwards;
+}
+
+.mo-stat-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 16px;
+    padding: 22px 20px;
+    text-align: center;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.mo-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(0, 220, 255, 0.18);
+}
+
+.mo-stat-value {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #a78bfa;
+}
+
+.mo-stat-label {
+    font-size: 0.78rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Shared Card */
+.monthly-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 18px;
+    padding: 24px 26px;
+    backdrop-filter: blur(18px);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.65);
+    margin-bottom: 24px;
+    animation: mo-enter 0.45s ease forwards;
+    opacity: 0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.monthly-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(0, 220, 255, 0.15);
+}
+
+.monthly-card h2 {
+    font-size: 1.25rem;
+    color: #8be8ff;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* Monthly Goals Grid */
+.monthly-goals-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.mo-goal-card {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 14px;
+    padding: 16px 18px;
+    transition: box-shadow 0.25s ease;
+}
+
+.mo-goal-card.done {
+    border-color: rgba(52, 211, 153, 0.35);
+    box-shadow: 0 0 18px rgba(52, 211, 153, 0.15);
+}
+
+.mo-goal-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.mo-goal-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e5e7eb;
+}
+
+.mo-goal-exp {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    padding: 3px 10px;
+    border-radius: 999px;
+}
+
+.mo-goal-track {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.mo-goal-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #00cfff, #a855f7);
+    border-radius: 999px;
+    transition: width 0.5s ease;
+}
+
+.mo-goal-card.done .mo-goal-fill {
+    background: linear-gradient(135deg, #34d399, #10b981);
+}
+
+.mo-goal-bottom {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.done-label {
+    color: #34d399;
+    font-weight: 700;
+}
+
+/* Activity Summary */
+.activity-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.activity-row {
+    display: grid;
+    grid-template-columns: 32px 130px 1fr 60px;
+    align-items: center;
+    gap: 14px;
+}
+
+.act-icon {
+    font-size: 1.1rem;
+}
+
+.act-label {
+    font-size: 0.88rem;
+    color: #c7d2fe;
+}
+
+.act-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.act-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.5s ease;
+    opacity: 0.85;
+}
+
+.act-count {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+/* Reflection */
+.monthly-reflections {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.monthly-reflections label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.monthly-reflections label span {
+    font-size: 0.82rem;
+    color: #8be8ff;
+    font-weight: 600;
+}
+
+.monthly-reflections textarea {
+    resize: none;
+    min-height: 90px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    background: rgba(15, 23, 42, 0.75);
+    color: #e5e7eb;
+    font-size: 0.88rem;
+    outline: none;
+}
+
+.monthly-reflections textarea:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.5);
+}
+
+.monthly-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 4px;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    padding: 12px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #00cfff, #a955ff);
+    color: #020617;
+    box-shadow: 0 0 25px rgba(0, 200, 255, 0.5);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 28px rgba(0, 200, 255, 0.6);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: #e5e7eb;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+/* History List */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.history-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 50px 90px 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    transition: box-shadow 0.25s ease;
+}
+
+.history-row:hover {
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.12);
+}
+
+.history-month {
+    font-weight: 700;
+    color: #8be8ff;
+    font-size: 0.9rem;
+}
+
+.history-bar-track {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.history-bar-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #00cfff, #a855f7);
+    border-radius: 999px;
+}
+
+.history-score {
+    font-weight: 700;
+    color: #a78bfa;
+    font-size: 0.88rem;
+}
+
+.history-exp {
+    font-size: 0.82rem;
+    color: #38bdf8;
+    font-weight: 600;
+}
+
+.history-detail {
+    font-size: 0.78rem;
+    color: #9ca3af;
+}
+
+@keyframes mo-enter {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 900px) {
+    .monthly-page {
+        padding: 40px 18px 60px;
+    }
+
+    .monthly-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .monthly-goals-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .monthly-reflections {
+        grid-template-columns: 1fr;
+    }
+
+    .activity-row {
+        grid-template-columns: 28px 100px 1fr 50px;
+    }
+
+    .history-row {
+        grid-template-columns: 36px 1fr 44px;
+    }
+
+    .history-exp,
+    .history-detail {
+        display: none;
+    }
+}

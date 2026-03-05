@@ -1,0 +1,459 @@
+.yearly-page {
+    min-height: 100vh;
+    padding: 40px 60px 60px;
+    color: #e5e7eb;
+    background: radial-gradient(circle at 10% 0%, rgba(0, 200, 255, 0.18), transparent 55%),
+        radial-gradient(circle at 90% 100%, rgba(169, 85, 255, 0.16), transparent 55%),
+        #020617;
+}
+
+.yearly-header {
+    text-align: center;
+    margin-bottom: 36px;
+    margin-top: -10px;
+}
+
+.yearly-header h1 {
+    font-size: 2.6rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #ff3cac, #a955ff, #2b86c5);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.yearly-header p {
+    color: #8be8ff;
+    margin-top: 6px;
+    font-size: 1rem;
+}
+
+/* KPI Cards */
+.yearly-kpis {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(5, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+    animation: yr-enter 0.45s ease forwards;
+}
+
+.yr-kpi-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.yr-kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(0, 220, 255, 0.18);
+}
+
+.yr-kpi-card.primary-kpi {
+    background: rgba(0, 207, 255, 0.06);
+    border-color: rgba(0, 207, 255, 0.25);
+    box-shadow: 0 0 30px rgba(0, 207, 255, 0.15);
+}
+
+.yr-kpi-icon {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.yr-kpi-value {
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: #a78bfa;
+}
+
+.primary-kpi .yr-kpi-value {
+    font-size: 2.2rem;
+    color: #00cfff;
+    text-shadow: 0 0 18px rgba(0, 207, 255, 0.5);
+}
+
+.yr-kpi-label {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Shared Card */
+.yearly-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 18px;
+    padding: 24px 26px;
+    backdrop-filter: blur(18px);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.65);
+    margin-bottom: 24px;
+    animation: yr-enter 0.45s ease forwards;
+    opacity: 0;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.yearly-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(0, 220, 255, 0.15);
+}
+
+.yearly-card h2 {
+    font-size: 1.25rem;
+    color: #8be8ff;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* Monthly Score Chart */
+.yr-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 220px;
+}
+
+.yr-bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    cursor: pointer;
+}
+
+.yr-bar-track {
+    width: 100%;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+.yr-bar-fill {
+    width: 100%;
+    background: linear-gradient(to top, #00cfff, #a855f7);
+    border-radius: 8px 8px 0 0;
+    transition: height 0.6s ease;
+    min-height: 4px;
+    box-shadow: 0 0 8px rgba(0, 200, 255, 0.3);
+}
+
+.yr-bar-fill.best {
+    background: linear-gradient(to top, #f59e0b, #fbbf24);
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);
+}
+
+.yr-bar-label {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.yr-bar-col.hovered .yr-bar-track {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Tooltip */
+.yr-tooltip {
+    position: absolute;
+    top: -54px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(0, 207, 255, 0.3);
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    color: #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 0 16px rgba(0, 200, 255, 0.25);
+    z-index: 10;
+}
+
+.yr-tooltip strong {
+    color: #38bdf8;
+    font-size: 0.88rem;
+}
+
+.yr-tooltip span {
+    color: #9ca3af;
+}
+
+/* Highlights */
+.yearly-highlights {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+    animation: yr-enter 0.5s ease forwards;
+}
+
+.yr-highlight-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    backdrop-filter: blur(16px);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.yr-highlight-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 28px rgba(0, 200, 255, 0.15);
+}
+
+.yr-highlight-icon {
+    font-size: 1.8rem;
+    width: 46px;
+    height: 46px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.yr-highlight-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.yr-highlight-label {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.yr-highlight-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.yr-highlight-sub {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+/* Yearly Goals */
+.yr-goals {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.yr-goal-row {
+    display: grid;
+    grid-template-columns: 220px 1fr 80px;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 18px;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    transition: box-shadow 0.25s ease;
+}
+
+.yr-goal-row.done {
+    border-color: rgba(52, 211, 153, 0.3);
+    box-shadow: 0 0 18px rgba(52, 211, 153, 0.12);
+}
+
+.yr-goal-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.yr-goal-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e5e7eb;
+}
+
+.yr-goal-progress-text {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.yr-goal-track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.yr-goal-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #00cfff, #a855f7);
+    border-radius: 999px;
+    transition: width 0.6s ease;
+}
+
+.yr-goal-row.done .yr-goal-fill {
+    background: linear-gradient(135deg, #34d399, #10b981);
+}
+
+.yr-goal-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.yr-goal-pct {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #a78bfa;
+}
+
+.yr-goal-row.done .yr-goal-pct {
+    color: #34d399;
+}
+
+.yr-goal-exp {
+    font-size: 0.75rem;
+    color: #38bdf8;
+    font-weight: 600;
+}
+
+/* Reflections */
+.yr-reflections {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.yr-reflections label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.yr-reflections label span {
+    font-size: 0.82rem;
+    color: #8be8ff;
+    font-weight: 600;
+}
+
+.yr-reflections textarea {
+    resize: none;
+    min-height: 100px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    background: rgba(15, 23, 42, 0.75);
+    color: #e5e7eb;
+    font-size: 0.88rem;
+    outline: none;
+}
+
+.yr-reflections textarea:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.5);
+}
+
+.yr-actions {
+    display: flex;
+    gap: 16px;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    padding: 12px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #00cfff, #a955ff);
+    color: #020617;
+    box-shadow: 0 0 25px rgba(0, 200, 255, 0.5);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 28px rgba(0, 200, 255, 0.6);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: #e5e7eb;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+@keyframes yr-enter {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 1100px) {
+    .yearly-kpis {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .yearly-highlights {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .yearly-page {
+        padding: 40px 18px 60px;
+    }
+
+    .yearly-kpis {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .yr-goal-row {
+        grid-template-columns: 1fr 60px;
+    }
+
+    .yr-goal-center {
+        display: none;
+    }
+
+    .yr-reflections {
+        grid-template-columns: 1fr;
+    }
+}
