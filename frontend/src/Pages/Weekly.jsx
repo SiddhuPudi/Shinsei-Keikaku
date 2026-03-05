@@ -54,7 +54,7 @@ function Weekly() {
             <div className="weekly-stats">
                 <div className="wk-stat-card">
                     <span className="wk-stat-value">{weekPct}%</span>
-                    <span className="wk-stat-label">Week Score</span>
+                    <span className="wk-stat-label">Consistency</span>
                 </div>
                 <div className="wk-stat-card">
                     <span className="wk-stat-value" style={{ color: "#38bdf8" }}>{totalDone}</span>

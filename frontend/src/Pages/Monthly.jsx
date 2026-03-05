@@ -56,7 +56,7 @@ function Monthly() {
                     {/* KPI Cards */}
                     <div className="monthly-stats">
                         {[
-                            { label: "Month Score", value: `${currentMonth.score}%`, color: "#a78bfa" },
+                            { label: "Consistency", value: `${currentMonth.score}%`, color: "#a78bfa" },
                             { label: "EXP Earned", value: `+${currentMonth.exp}`, color: "#38bdf8" },
                             { label: "Perfect Days", value: currentMonth.perfectDays, color: "#34d399" },
                             { label: "Mistakes", value: currentMonth.mistakes, color: "#fb7185" },

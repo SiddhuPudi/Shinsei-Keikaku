@@ -121,10 +121,12 @@ function Achievements() {
     const [filter, setFilter] = useState("all");
 
     const filtered = allAchievements.filter((a) => {
-        if (filter === "all") return true;
-        if (filter === "unlocked") return a.unlocked;
-        if (filter === "locked") return !a.unlocked;
-        return a.category === filter;
+        // Strip leading emoji + space from filter values like "🔥 streak" → "streak"
+        const f = filter.includes(" ") ? filter.split(" ").slice(1).join(" ") : filter;
+        if (f === "all") return true;
+        if (f === "unlocked") return a.unlocked;
+        if (f === "locked") return !a.unlocked;
+        return a.category === f;
     });
 
     const unlockedCount = allAchievements.filter((a) => a.unlocked).length;
@@ -179,7 +181,7 @@ function Achievements() {
 
             {/* Filters */}
             <div className="ach-filters">
-                {["all", "unlocked", "locked", "streak", "fitness", "intellect", "discipline", "milestone"].map((f) => (
+                {["all", "🔓 unlocked", "🔒 locked", "🔥 streak", "⚔️ fitness", "🧠 intellect", "🎯 discipline", "🏆 milestone"].map((f) => (
                     <button
                         key={f}
                         className={`ach-filter-btn ${filter === f ? "active" : ""}`}
