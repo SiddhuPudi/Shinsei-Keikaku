@@ -24,6 +24,7 @@ function Toggle({ on, onChange }) {
 function Settings() {
     const { user } = useAuth();
     const [activeSection, setActiveSection] = useState("Profile");
+    const [confirm, setConfirm] = useState(null); // { action: string, label: string }
 
     const [prefs, setPrefs] = useState({
         darkMode: true,
@@ -257,35 +258,77 @@ function Settings() {
 
                     {activeSection === "Data" && (
                         <div className="settings-card">
-                            <h2>Data & Privacy</h2>
+                            <h2>Data &amp; Privacy</h2>
+
+                            {/* ── Confirmation Modal ── */}
+                            {confirm && (
+                                <div className="data-confirm-overlay">
+                                    <div className="data-confirm-box">
+                                        <span className="data-confirm-icon">⚠️</span>
+                                        <h4 className="data-confirm-title">Are you sure?</h4>
+                                        <p className="data-confirm-msg">
+                                            This will <strong>{confirm.label}</strong>. This action
+                                            cannot be undone.
+                                        </p>
+                                        <div className="data-confirm-actions">
+                                            <button
+                                                className="btn-secondary"
+                                                onClick={() => setConfirm(null)}
+                                            >
+                                                Go Back
+                                            </button>
+                                            <button
+                                                className="btn-danger"
+                                                onClick={() => {
+                                                    /* TODO: wire real action here */
+                                                    setConfirm(null);
+                                                }}
+                                            >
+                                                Yes, {confirm.action}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="data-section">
                                 <div className="data-item">
                                     <div>
                                         <span className="pref-label">Export All Data</span>
                                         <span className="pref-sub">Download your data as JSON</span>
                                     </div>
-                                    <button className="btn-secondary small-btn">Export</button>
+                                    <button className="btn-secondary">Export</button>
                                 </div>
                                 <div className="data-item">
                                     <div>
                                         <span className="pref-label">Import Data</span>
                                         <span className="pref-sub">Restore from a previous export</span>
                                     </div>
-                                    <button className="btn-secondary small-btn">Import</button>
+                                    <button className="btn-secondary">Import</button>
                                 </div>
                                 <div className="data-item">
                                     <div>
                                         <span className="pref-label">Clear Daily Logs</span>
                                         <span className="pref-sub">Remove all daily tracking history</span>
                                     </div>
-                                    <button className="btn-danger small-btn">Clear</button>
+                                    <button
+                                        className="btn-danger"
+                                        onClick={() => setConfirm({ action: "Clear", label: "permanently clear all daily logs" })}
+                                    >
+                                        Clear
+                                    </button>
                                 </div>
                                 <div className="data-item">
                                     <div>
                                         <span className="pref-label">Delete Account</span>
                                         <span className="pref-sub">Permanently delete all your data</span>
                                     </div>
-                                    <button className="btn-danger small-btn">Delete</button>
+                                    <button
+                                        className="btn-danger"
+                                        onClick={() => setConfirm({ action: "Delete", label: "permanently delete your account and all data" })}
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </div>
                         </div>

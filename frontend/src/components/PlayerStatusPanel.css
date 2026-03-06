@@ -12,9 +12,17 @@
 .player-header {
     display: flex;
     align-items: center;
-    gap : 16px;
+    justify-content: space-between;
+    gap: 16px;
     margin-bottom: 16px;
 }
+
+.player-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 
 .avatar-section {
     position: relative;
@@ -27,7 +35,7 @@
     height: 88px;
     border-radius: 50%;
     background: linear-gradient(135deg, #00c9ff, #00eaff);
-    display:flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 22px rgba(0, 200, 255, 0.6);
@@ -133,4 +141,69 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 2px;
+}
+
+/* ── Player name row (username + friends trigger) ── */
+.player-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ── Friends trigger button ── */
+.friends-trigger-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    align-self: center;
+    background: rgba(0, 207, 255, 0.18);
+    border: 1px solid rgba(0, 207, 255, 0.5);
+    border-radius: 20px;
+    padding: 7px 14px 7px 10px;
+    cursor: pointer;
+    color: #00d4ff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all 0.22s ease;
+    white-space: nowrap;
+    letter-spacing: 0.4px;
+    box-shadow: 0 0 10px rgba(0, 200, 255, 0.15);
+}
+
+.friends-trigger-btn:hover {
+    background: rgba(0, 207, 255, 0.18);
+    border-color: rgba(0, 207, 255, 0.5);
+    box-shadow: 0 0 12px rgba(0, 207, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.friends-trigger-btn.active {
+    background: linear-gradient(135deg, rgba(0, 207, 255, 0.22), rgba(169, 85, 255, 0.18));
+    border-color: rgba(0, 207, 255, 0.55);
+    color: #00cfff;
+    box-shadow: 0 0 14px rgba(0, 200, 255, 0.3);
+}
+
+.friends-trigger-label {
+    font-size: 0.78rem;
+}
+
+/* ── Floating portal – always on top ── */
+.friends-popup-portal {
+    position: fixed;
+    z-index: 9999;
+    animation: popup-enter 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes popup-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }

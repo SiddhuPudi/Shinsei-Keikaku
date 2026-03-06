@@ -1,0 +1,419 @@
+/* ── FriendsPanel ── */
+
+.friends-panel {
+    background: rgba(8, 18, 40, 0.82);
+    border-radius: 20px;
+    border: 1px solid rgba(0, 207, 255, 0.22);
+    backdrop-filter: blur(20px);
+    padding: 22px 24px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 200, 255, 0.08);
+    color: #fff;
+    animation: friends-fade-in 0.7s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 360px;
+}
+
+@keyframes friends-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Toast ── */
+.friends-toast {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: linear-gradient(135deg, rgba(0, 207, 255, 0.2), rgba(169, 85, 255, 0.2));
+    border: 1px solid rgba(0, 207, 255, 0.35);
+    backdrop-filter: blur(10px);
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    color: #8be8ff;
+    animation: toast-in 0.3s ease, toast-out 0.4s ease 1.8s forwards;
+    z-index: 10;
+    pointer-events: none;
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toast-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* ── Header ── */
+.friends-panel-header {
+    margin-bottom: 18px;
+}
+
+.friends-panel-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.friends-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.friends-close-btn {
+    background: rgba(255, 60, 120, 0.1);
+    border: 1px solid rgba(255, 60, 120, 0.28);
+    border-radius: 8px;
+    color: #ff6fa0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.friends-close-btn:hover {
+    background: rgba(255, 60, 120, 0.28);
+    box-shadow: 0 0 10px rgba(255, 60, 120, 0.35);
+    transform: scale(1.1);
+}
+
+
+.friends-panel-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #8be8ff;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+.friends-online-badge {
+    font-size: 0.78rem;
+    background: rgba(0, 207, 255, 0.12);
+    border: 1px solid rgba(0, 207, 255, 0.3);
+    color: #00cfff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* ── Tabs ── */
+.friends-tabs {
+    display: flex;
+    gap: 6px;
+}
+
+.friends-tab {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: #8ea4c4;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 7px 10px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.friends-tab:hover {
+    background: rgba(0, 207, 255, 0.1);
+    border-color: rgba(0, 207, 255, 0.3);
+    color: #00cfff;
+}
+
+.friends-tab.active {
+    background: linear-gradient(135deg, rgba(0, 207, 255, 0.18), rgba(169, 85, 255, 0.14));
+    border-color: rgba(0, 207, 255, 0.45);
+    color: #00cfff;
+    box-shadow: 0 0 14px rgba(0, 200, 255, 0.18);
+}
+
+.tab-count {
+    background: rgba(0, 207, 255, 0.2);
+    color: #00d4ff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 20px;
+    min-width: 20px;
+    text-align: center;
+}
+
+.tab-count.pending {
+    background: rgba(255, 60, 120, 0.22);
+    color: #ff5fa0;
+}
+
+/* ── Friend Rows ── */
+.friends-list,
+.friends-search-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    max-height: 280px;
+    padding-right: 2px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 207, 255, 0.2) transparent;
+}
+
+.friends-list::-webkit-scrollbar,
+.friends-search-tab::-webkit-scrollbar {
+    width: 4px;
+}
+
+.friends-list::-webkit-scrollbar-thumb,
+.friends-search-tab::-webkit-scrollbar-thumb {
+    background: rgba(0, 207, 255, 0.25);
+    border-radius: 4px;
+}
+
+.friend-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(10, 14, 25, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 10px 14px;
+    transition: all 0.22s ease;
+    animation: row-fade-in 0.35s ease both;
+}
+
+.friend-row:hover {
+    background: rgba(0, 207, 255, 0.07);
+    border-color: rgba(0, 207, 255, 0.2);
+    transform: translateX(2px);
+}
+
+@keyframes row-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Avatar ── */
+.friend-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a2a4a, #0f1a2e);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #8be8ff;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.friend-avatar.online {
+    border-color: #00cfff;
+    box-shadow: 0 0 10px rgba(0, 207, 255, 0.45);
+}
+
+.online-dot {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid #0f1a2e;
+}
+
+.online-dot.active {
+    background: #00ff88;
+    box-shadow: 0 0 6px rgba(0, 255, 136, 0.7);
+}
+
+/* ── Friend Info ── */
+.friend-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.friend-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #c2d9ff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.friend-rank {
+    font-size: 0.78rem;
+    color: #5a7090;
+    margin-top: 2px;
+}
+
+/* ── Action Buttons ── */
+.friend-action-btn {
+    border: none;
+    border-radius: 9px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 6px 13px;
+    transition: all 0.22s ease;
+    flex-shrink: 0;
+}
+
+.add-btn {
+    background: linear-gradient(135deg, rgba(0, 207, 255, 0.2), rgba(169, 85, 255, 0.2));
+    border: 1px solid rgba(0, 207, 255, 0.4);
+    color: #00cfff;
+}
+
+.add-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(0, 207, 255, 0.35), rgba(169, 85, 255, 0.3));
+    box-shadow: 0 0 14px rgba(0, 200, 255, 0.35);
+    transform: scale(1.04);
+}
+
+.add-btn.sent,
+.add-btn:disabled {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #5a7090;
+    cursor: default;
+    transform: none;
+}
+
+.remove-btn {
+    background: rgba(255, 60, 120, 0.1);
+    border: 1px solid rgba(255, 60, 120, 0.28);
+    color: #ff6fa0;
+}
+
+.remove-btn:hover {
+    background: rgba(255, 60, 120, 0.22);
+    box-shadow: 0 0 10px rgba(255, 60, 120, 0.3);
+    transform: scale(1.06);
+}
+
+/* ── Request Actions ── */
+.request-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* ── Search Bar ── */
+.friends-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(10, 14, 25, 0.7);
+    border: 1px solid rgba(0, 207, 255, 0.25);
+    border-radius: 12px;
+    padding: 9px 14px;
+    margin-bottom: 12px;
+    transition: border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.friends-search-bar:focus-within {
+    border-color: rgba(0, 207, 255, 0.55);
+    box-shadow: 0 0 16px rgba(0, 200, 255, 0.18);
+}
+
+.search-icon {
+    font-size: 1rem;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.friends-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #c2d9ff;
+    font-size: 0.92rem;
+    min-width: 0;
+}
+
+.friends-search-input::placeholder {
+    color: #3e5570;
+}
+
+.search-clear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #5a7090;
+    font-size: 0.85rem;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color 0.2s;
+}
+
+.search-clear:hover {
+    color: #ff6fa0;
+}
+
+.search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    max-height: 220px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 207, 255, 0.2) transparent;
+}
+
+/* ── Empty state ── */
+.friends-empty {
+    text-align: center;
+    color: #3e5570;
+    font-size: 0.88rem;
+    padding: 28px 0 10px;
+}

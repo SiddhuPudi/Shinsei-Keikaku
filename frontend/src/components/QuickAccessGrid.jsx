@@ -3,26 +3,30 @@ import "./QuickAccess.css";
 
 function QuickAccessGrid() {
     return (
-        <div className = "quick-grid">
+        <div className="quick-grid">
             <QuickAccessCard
-                icon = "🗓️"
-                title = "Daily Tracking"
-                desc = "Log your sleep, habits, study & wake time."
-            />
-            <QuickAccessCard 
-                icon = "📜"
-                title = "Quest Log"
-                desc = "Track daily, weekly and long-term quests."
+                icon="🗓️"
+                title="Daily Tracking"
+                desc="Log your sleep, habits, study & wake time."
+                to="/daily"
             />
             <QuickAccessCard
-                icon = "📊"
-                title = "Analytics"
-                desc = "View montly & yearly performance reports."
+                icon="📜"
+                title="Quest Log"
+                desc="Track daily, weekly and long-term quests."
+                to="/quests"
             />
             <QuickAccessCard
-                icon = "💰"
-                title = "Finance Tracker"
-                desc = "Manage expenses, income and gold balance."
+                icon="📊"
+                title="Analytics"
+                desc="View montly & yearly performance reports."
+                to="/monthly"
+            />
+            <QuickAccessCard
+                icon="💰"
+                title="Finance Tracker"
+                desc="Manage expenses, income and gold balance."
+                to="/finance"
             />
         </div>
     );
