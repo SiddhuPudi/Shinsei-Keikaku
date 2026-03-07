@@ -391,13 +391,43 @@
     }
 }
 
-@media (max-width: 900px) {
+/* ── Tablet (iPad) ── */
+@media (max-width: 1024px) {
     .monthly-page {
-        padding: 40px 18px 60px;
+        padding: 40px 28px 60px;
     }
 
     .monthly-stats {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .monthly-page {
+        padding: 75px 14px 40px;
+    }
+
+    .monthly-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .monthly-tabs {
+        gap: 8px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding-bottom: 4px;
+    }
+
+    .monthly-tab {
+        white-space: nowrap;
+        padding: 8px 18px;
+    }
+
+    .monthly-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .monthly-goals-grid {
@@ -419,5 +449,20 @@
     .history-exp,
     .history-detail {
         display: none;
+    }
+
+    .monthly-actions {
+        flex-direction: column;
+    }
+}
+
+/* ── Very small phones ── */
+@media (max-width: 400px) {
+    .monthly-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .monthly-header h1 {
+        font-size: 1.5rem;
     }
 }

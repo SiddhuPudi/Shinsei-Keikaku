@@ -19,9 +19,9 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow:
-    0 0 2px rgba(255, 60, 172, 0.4),
-    0 0 3px rgba(169, 85, 255, 0.4),
-    0 0 4px rgba(0, 207, 255, 0.4);
+        0 0 2px rgba(255, 60, 172, 0.4),
+        0 0 3px rgba(169, 85, 255, 0.4),
+        0 0 4px rgba(0, 207, 255, 0.4);
 }
 
 .daily-header p {
@@ -128,7 +128,7 @@
 }
 
 .exp-penalty {
-    color: #fb7185; 
+    color: #fb7185;
     font-size: 0.85rem;
     font-weight: 700;
     text-shadow: 0 0 12px rgba(251, 113, 133, 0.6);
@@ -318,7 +318,7 @@
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s ease;
-    color: #e5e7eb;   
+    color: #e5e7eb;
 }
 
 .calendar-day:hover {
@@ -362,7 +362,8 @@
     gap: 6px;
 }
 
-.daily-card > label, .daily-card > .muted-text {
+.daily-card>label,
+.daily-card>.muted-text {
     grid-column: span 1;
 }
 
@@ -404,7 +405,8 @@
     font-size: 0.8rem;
 }
 
-.daily-card input, .daily-card textarea {
+.daily-card input,
+.daily-card textarea {
     width: 100%;
     margin-top: 8px;
     padding: 10px 12px;
@@ -421,7 +423,9 @@
     min-height: 80px;
 }
 
-.daily-card input:focus, .daily-card textarea:focus, .glass-select:focus {
+.daily-card input:focus,
+.daily-card textarea:focus,
+.glass-select:focus {
     border-color: #38bdf8;
     box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7), 0 0 18px rgba(56, 189, 248, 0.35);
 }
@@ -458,7 +462,7 @@
     flex-wrap: wrap;
 }
 
-.daily-card:has(.mistakes) > label {
+.daily-card:has(.mistakes)>label {
     margin-top: 10px;
 }
 
@@ -479,7 +483,7 @@
     padding: 10px 12px;
     border-radius: 10px;
     border: 1px solid rgba(148, 163, 184, 0.4);
-    background: rgba(15,23, 42, 0.75);
+    background: rgba(15, 23, 42, 0.75);
     color: #e5e7eb;
     font-size: 0.9rem;
     outline: none;
@@ -527,14 +531,14 @@
     border-color: #38bdf8;
 }
 
-.custom-checkbox input:checked + .checkmark {
+.custom-checkbox input:checked+.checkmark {
     background: linear-gradient(135deg, #00cfff, #3b82fc);
     border-color: transparent;
     box-shadow: 0 0 12px rgba(0, 200, 255, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.15);
     animation: checkbox-pop 0.25s ease;
 }
 
-.custom-checkbox input:checked + .checkmark::after {
+.custom-checkbox input:checked+.checkmark::after {
     content: "✓";
     position: absolute;
     top: 50%;
@@ -555,7 +559,8 @@
     margin-top: 24px;
 }
 
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
     flex: 1;
     padding: 12px;
     border-radius: 999px;
@@ -588,7 +593,8 @@
     transform: translateY(-2px);
 }
 
-.btn-primary:active, .btn-secondary:active {
+.btn-primary:active,
+.btn-secondary:active {
     transform: scale(0.97);
     box-shadow: 0 0 10px rgba(0, 200, 255, 0.4);
 }
@@ -599,31 +605,129 @@
 }
 
 @keyframes saving-pulse {
-    from { box-shadow: 0 0 14px rgba(99, 102, 241, 0.5); }
-    to { box-shadow: 0 0 28px rgba(34, 211, 238, 0.8); }
+    from {
+        box-shadow: 0 0 14px rgba(99, 102, 241, 0.5);
+    }
+
+    to {
+        box-shadow: 0 0 28px rgba(34, 211, 238, 0.8);
+    }
 }
 
 @keyframes card-enter {
-    from { opacity: 0; transform: translateY(12px) scale(0.98); }
-    to { opacity:1; transform: translateY(0) scale(1); }
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 @keyframes pulse-glow {
-    from { box-shadow: 0 0 14px rgba(0, 200, 255, 0.35); }
-    to { box-shadow: 0 0 28px rgba(0, 200, 255, 0.7); }
+    from {
+        box-shadow: 0 0 14px rgba(0, 200, 255, 0.35);
+    }
+
+    to {
+        box-shadow: 0 0 28px rgba(0, 200, 255, 0.7);
+    }
 }
 
 @keyframes checkbox-pop {
-    0% { transform: scale(0.9); }
-    50% { transform: scale(1.15); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(0.9);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
+/* ── Tablet (iPad) ── */
 @media (max-width: 1100px) {
     .streak-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .daily-main-grid {
         grid-template-columns: 1fr;
+    }
+
+    .daily-page {
+        padding: 40px 28px 60px;
+    }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .daily-page {
+        padding: 75px 14px 40px;
+    }
+
+    .daily-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .daily-progress {
+        grid-template-columns: 1fr;
+    }
+
+    .daily-completion {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .streak-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .daily-main-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .daily-right .daily-card {
+        grid-template-columns: 1fr;
+    }
+
+    .daily-right .daily-card h3,
+    .daily-right .daily-card .custom-checkbox,
+    .daily-right .daily-card .muted-text {
+        grid-column: span 1;
+    }
+
+    .daily-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .mistakes {
+        flex-direction: column;
+        gap: 14px;
+        align-items: flex-start;
+    }
+
+    .daily-card {
+        padding: 16px 16px;
+    }
+}
+
+/* ── Very small phones ── */
+@media (max-width: 400px) {
+    .daily-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .streak-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
     }
 }

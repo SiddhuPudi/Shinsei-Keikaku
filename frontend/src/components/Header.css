@@ -48,7 +48,7 @@
     -webkit-text-fill-color: transparent;
     font-size: 1.5rem;
     font-weight: 800;
-    text-shadow:  0 0 25px rgba(255, 60, 172, 0.6), 0 0 33px rgba(169, 85, 255, 0.6), 0 0 40px rgba(0, 207, 255, 0.6);
+    text-shadow: 0 0 25px rgba(255, 60, 172, 0.6), 0 0 33px rgba(169, 85, 255, 0.6), 0 0 40px rgba(0, 207, 255, 0.6);
 }
 
 .nav-title:hover {
@@ -123,14 +123,60 @@
     color: #fee2e2;
 }
 
-@media (max-width: 900px) {
+/* ── Tablet (iPad) ── */
+@media (max-width: 1024px) {
+    .nav-links {
+        gap: 14px;
+    }
+
+    .nav-links a {
+        font-size: 0.9rem;
+    }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
     .nav-container {
+        height: 60px;
+        padding: 0 16px;
         justify-content: space-between;
     }
 
     .nav-links {
-        position: static;
-        transform: none;
-        margin: 0 auto;
+        display: none;
+    }
+
+    .nav-title {
+        font-size: 1.1rem;
+    }
+
+    .logo-box {
+        width: 28px;
+        height: 28px;
+    }
+
+    .logo-kanji {
+        font-size: 1.1rem;
+    }
+
+    .nav-username {
+        display: none;
+    }
+
+    .account-btn {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+
+    .logout-btn {
+        padding: 3px 8px;
+        font-size: 0.8rem;
+    }
+}
+
+/* ── Very small phones ── */
+@media (max-width: 400px) {
+    .nav-right {
+        gap: 6px;
     }
 }

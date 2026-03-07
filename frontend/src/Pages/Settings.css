@@ -544,9 +544,21 @@
     }
 }
 
+/* ── Tablet (iPad) ── */
+@media (max-width: 1024px) {
+    .settings-page {
+        padding: 40px 28px 60px;
+    }
+}
+
+/* ── Mobile + small tablets ── */
 @media (max-width: 900px) {
     .settings-page {
-        padding: 40px 18px 60px;
+        padding: 75px 14px 40px;
+    }
+
+    .settings-header h1 {
+        font-size: 1.9rem;
     }
 
     .settings-layout {
@@ -557,6 +569,13 @@
         position: static;
         flex-direction: row;
         flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .settings-nav-btn {
+        padding: 8px 12px;
+        font-size: 0.82rem;
+        flex: 0 0 auto;
     }
 
     .settings-fields {
@@ -565,5 +584,26 @@
 
     .settings-fields label:has(textarea) {
         grid-column: span 1;
+    }
+
+    .settings-actions {
+        flex-wrap: wrap;
+    }
+
+    .profile-avatar-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
+/* ── Very small phones ── */
+@media (max-width: 400px) {
+    .settings-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .accent-colors {
+        flex-wrap: wrap;
     }
 }

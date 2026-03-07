@@ -1188,3 +1188,142 @@
     font-weight: 800;
     color: #e5e7eb;
 }
+
+/* ── Tablet (iPad) ── */
+@media (max-width: 1024px) {
+    .finance-page {
+        padding: 40px 28px 60px;
+    }
+
+    .finance-balance-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .budget-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .fin-modal {
+        width: 90vw;
+    }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .finance-page {
+        padding: 75px 14px 40px;
+    }
+
+    .finance-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .finance-tabs {
+        gap: 8px;
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+    }
+
+    .finance-tab {
+        padding: 8px 14px;
+        font-size: 0.82rem;
+        white-space: nowrap;
+    }
+
+    .finance-balance-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .bal-value {
+        font-size: 1.4rem;
+    }
+
+    .budget-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tx-row {
+        grid-template-columns: 10px 1fr auto;
+        gap: 10px;
+    }
+
+    .tx-cat-badge {
+        display: none;
+    }
+
+    .tx-filters {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .tx-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .breakdown-row {
+        grid-template-columns: 60px 1fr 80px;
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .breakdown-bar-wrap {
+        grid-template-columns: 70px 1fr;
+        gap: 6px;
+    }
+
+    .savings-goal-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .fin-goal-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .fin-modal-overlay {
+        padding-top: 70px;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .fin-modal {
+        width: 100%;
+    }
+
+    .bdr-left {
+        min-width: auto;
+    }
+
+    .bdr-right {
+        min-width: auto;
+    }
+
+    .budget-detail-row {
+        grid-template-columns: auto 1fr;
+        gap: 12px;
+    }
+
+    .bdr-right {
+        grid-column: span 2;
+        align-items: flex-start;
+    }
+}
+
+/* ── Very small phones ── */
+@media (max-width: 400px) {
+    .finance-balance-row {
+        grid-template-columns: 1fr;
+    }
+
+    .finance-header h1 {
+        font-size: 1.5rem;
+    }
+}

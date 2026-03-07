@@ -2,7 +2,7 @@
   min-height: 100vh;
   padding: 40px 60px 60px;
   color: #e5e7eb;
-  background: radial-gradient(circle at 10% 0%, rgba(0, 200, 255,0.18), transparent 55%), radial-gradient(circle at 90% 100%, rgba(169, 85, 255, 0.16), transparent 55%), #020617;
+  background: radial-gradient(circle at 10% 0%, rgba(0, 200, 255, 0.18), transparent 55%), radial-gradient(circle at 90% 100%, rgba(169, 85, 255, 0.16), transparent 55%), #020617;
 }
 
 .quests-header {
@@ -186,11 +186,25 @@
   color: #020617;
 }
 
-.stat-badge.strength { background: #fb7185; }
-.stat-badge.intellect { background: #a78bfa; }
-.stat-badge.discipline { background: #38bdf8; }
-.stat-badge.vitality { background: #34d399; }
-.stat-badge.focus { background: #facc15; }
+.stat-badge.strength {
+  background: #fb7185;
+}
+
+.stat-badge.intellect {
+  background: #a78bfa;
+}
+
+.stat-badge.discipline {
+  background: #38bdf8;
+}
+
+.stat-badge.vitality {
+  background: #34d399;
+}
+
+.stat-badge.focus {
+  background: #facc15;
+}
 
 
 .quest-card h3 {
@@ -225,11 +239,11 @@
   transition: width 0.4s ease;
 }
 
-.quest-card[data-type = "weekly"] .quest-progress {
+.quest-card[data-type="weekly"] .quest-progress {
   height: 8px;
 }
 
-.quest-card[data-type = "long"] .quest-progress {
+.quest-card[data-type="long"] .quest-progress {
   height: 4px;
   opacity: 0.7;
 }
@@ -251,7 +265,7 @@
   border-radius: 22px;
   padding: 28px;
   border: 1px solid rgba(148, 163, 184, 0.18);
-  box-shadow: 0 0 40px rgba(0, 200, 255,0.25);
+  box-shadow: 0 0 40px rgba(0, 200, 255, 0.25);
   animation: slide down 0.4s ease;
 }
 
@@ -284,7 +298,9 @@
   margin-bottom: 14px;
 }
 
-.quest-modal input, .quest-modal textarea, .quest-modal select {
+.quest-modal input,
+.quest-modal textarea,
+.quest-modal select {
   padding: 10px 12px;
   border-radius: 10px;
   background: rgba(15, 23, 42, 0.75);
@@ -312,7 +328,8 @@
   gap: 7px;
 }
 
-.cancel-btn, .create-btn {
+.cancel-btn,
+.create-btn {
   padding: 8px 20px;
   border-radius: 999px;
   font-size: 0.85rem;
@@ -345,6 +362,94 @@
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Tablet (iPad) ── */
+@media (max-width: 1024px) {
+  .quests-page {
+    padding: 40px 28px 60px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .quests-page {
+    padding: 75px 14px 40px;
+  }
+
+  .quests-header h1 {
+    font-size: 1.9rem;
+  }
+
+  .quest-list {
+    grid-template-columns: 1fr;
+  }
+
+  .empty-quests {
+    grid-column: span 1;
+  }
+
+  .custom-quest-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px 16px;
+  }
+
+  .create-quest-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .quest-filters {
+    gap: 8px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding-bottom: 4px;
+  }
+
+  .filter-btn {
+    white-space: nowrap;
+    padding: 7px 14px;
+    font-size: 0.82rem;
+  }
+
+  .quest-alignment {
+    grid-template-columns: 1fr auto;
+  }
+
+  .quest-status {
+    display: none;
+  }
+
+  .quest-modal-overlay {
+    padding-top: 70px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .quest-modal {
+    width: 100%;
+  }
+
+  .modal-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Very small phones ── */
+@media (max-width: 400px) {
+  .quests-header h1 {
+    font-size: 1.5rem;
+  }
 }

@@ -426,7 +426,8 @@
     }
 }
 
-@media (max-width: 1100px) {
+/* ── Large tablet ── */
+@media (max-width: 1200px) {
     .yearly-kpis {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -436,17 +437,44 @@
     }
 }
 
-@media (max-width: 900px) {
+/* ── Tablet (iPad) ── */
+@media (max-width: 1024px) {
     .yearly-page {
-        padding: 40px 18px 60px;
+        padding: 40px 28px 60px;
+    }
+
+    .yearly-kpis {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .yearly-highlights {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .yearly-page {
+        padding: 75px 14px 40px;
+    }
+
+    .yearly-header h1 {
+        font-size: 1.9rem;
     }
 
     .yearly-kpis {
         grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .yearly-highlights {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
     }
 
     .yr-goal-row {
         grid-template-columns: 1fr 60px;
+        gap: 12px;
     }
 
     .yr-goal-center {
@@ -455,5 +483,25 @@
 
     .yr-reflections {
         grid-template-columns: 1fr;
+    }
+
+    .yr-actions {
+        flex-direction: column;
+    }
+
+    .yr-chart {
+        gap: 6px;
+        height: 160px;
+    }
+}
+
+/* ── Very small phones ── */
+@media (max-width: 400px) {
+    .yearly-kpis {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .yearly-header h1 {
+        font-size: 1.5rem;
     }
 }

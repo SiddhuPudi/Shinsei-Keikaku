@@ -143,7 +143,7 @@
 
 .heatmap-cell:hover {
     transform: scale(1.015);
-    box-shadow:0 0 12px var(--cell-color);
+    box-shadow: 0 0 12px var(--cell-color);
 }
 
 /* Bar Chart */
@@ -322,13 +322,30 @@
     }
 }
 
-@media (max-width: 900px) {
+/* ── Tablet (iPad) ── */
+@media (max-width: 1024px) {
     .weekly-page {
-        padding: 40px 18px 60px;
+        padding: 40px 28px 60px;
     }
 
     .weekly-stats {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .weekly-page {
+        padding: 75px 14px 40px;
+    }
+
+    .weekly-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .weekly-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .weekly-goals {
@@ -336,10 +353,36 @@
     }
 
     .heatmap-row {
-        grid-template-columns: 90px repeat(7, 1fr);
+        grid-template-columns: 80px repeat(7, 1fr);
+        gap: 5px;
+    }
+
+    .heatmap-habit-label {
+        font-size: 0.72rem;
     }
 
     .habit-row {
-        grid-template-columns: 120px 1fr 36px;
+        grid-template-columns: 110px 1fr 36px;
+        gap: 10px;
+    }
+
+    .daily-bar-chart {
+        gap: 10px;
+    }
+}
+
+/* ── Very small phones ── */
+@media (max-width: 400px) {
+    .heatmap-row {
+        grid-template-columns: 60px repeat(7, 1fr);
+        gap: 3px;
+    }
+
+    .weekly-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .weekly-stats {
+        grid-template-columns: 1fr 1fr;
     }
 }

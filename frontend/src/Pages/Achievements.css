@@ -329,13 +329,30 @@
     }
 }
 
-@media (max-width: 900px) {
+/* ── Tablet (iPad) ── */
+@media (max-width: 1024px) {
     .achievements-page {
-        padding: 40px 18px 60px;
+        padding: 40px 28px 60px;
     }
 
     .achievements-stats {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+    .achievements-page {
+        padding: 75px 14px 40px;
+    }
+
+    .achievements-header h1 {
+        font-size: 1.9rem;
+    }
+
+    .achievements-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .achievements-grid {
@@ -344,5 +361,36 @@
 
     .ach-filters {
         justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+    }
+
+    .ach-filter-btn {
+        white-space: nowrap;
+    }
+
+    .ach-card-top {
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+    }
+
+    .ach-right {
+        grid-column: span 2;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: 8px;
+    }
+}
+
+/* ── Very small phones ── */
+@media (max-width: 400px) {
+    .achievements-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .achievements-header h1 {
+        font-size: 1.5rem;
     }
 }

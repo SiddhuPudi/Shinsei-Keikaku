@@ -3,10 +3,12 @@ import DashboardHeader from "../components/DashboardHeader.jsx";
 import PlayerStatusPanel from "../components/PlayerStatusPanel.jsx";
 import QuickAccessGrid from "../components/QuickAccessGrid.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
     const { user, isAuthenticated } = useAuth();
     const username = user?.username || "Player";
+    const navigate = useNavigate();
 
     if (!isAuthenticated) {
         return (
@@ -20,8 +22,8 @@ function Home() {
                     </h1>
                     <p className="hero-subtitle">Track. Grow. Evolve. Your Journey Starts Here</p>
                     <div className="hero-btns">
-                        <button className="hero-btn signin-btn">Sign In</button>
-                        <button className="hero-btn signup-btn">Sign Up</button>
+                        <button className="hero-btn signin-btn" onClick={() => navigate("/auth", { state: { mode: "login" } })}>Sign In</button>
+                        <button className="hero-btn signup-btn" onClick={() => navigate("/auth", { state: { mode: "register" } })}>Sign Up</button>
                     </div>
                 </div>
             </div>
