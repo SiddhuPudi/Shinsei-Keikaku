@@ -6,20 +6,273 @@ datasource db {
   provider = "postgresql"
 }
 
+enum QuestCategory {
+  FITNESS
+  STUDY
+  DISCIPLINE
+  HEALTH
+  LEETCODE
+  PRODUCTIVITY
+  CUSTOM
+}
+
+enum QuestDifficulty {
+  EASY
+  NORMAL
+  HARD
+  EXTREME
+}
+
+enum AchievementCategory {
+  MILESTONE
+  STREAK
+  FITNESS
+  INTELLECT
+  DISCIPLINE
+  SPECIAL
+}
+
+enum AchievementRarity {
+  COMMON
+  UNCOMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum TransactionCategory {
+  FOOD
+  FITNESS
+  LEARNING
+  ENTERTAINMENT
+  TRANSPORT
+  HEALTH
+  SHOPPING
+  HOUSING
+  SAVINGS
+  OTHER
+}
+
+enum Language {
+  ENGLISH
+  JAPANESE
+  HINDI
+}
+
 model User {
-  id            String    @id @default(uuid())
-  username      String    @unique
-  email         String    @unique
-  password      String
+  id           String   @id @default(cuid())
+  username     String   @unique
+  email        String   @unique
+  password     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  level         Int @default(1)
-  exp           Int @default(0)
-  currentStreak Int @default(0)
-  longestStreak Int @default(0)
+  stats        UserStats?
+  settings     UserSettings?
 
-  avatar        String?
-  bio           String?
+  quests       Quest[]
+  logs         DailyLog[]
+  transactions Transaction[]
+  savingsGoals SavingsGoal[]
+  budgets      Budget[]
+  reflections  Reflection[]
 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  achievements UserAchievement[]
+}
+
+model UserStats {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+
+  totalExp        Int      @default(0)
+  level           Int      @default(1)
+  levelProgress   Int      @default(0)
+
+  currentStreak   Int      @default(0)
+  longestStreak   Int      @default(0)
+
+  perfectDays     Int      @default(0)
+
+  totalWorkouts   Int      @default(0)
+  totalStudyHrs   Float    @default(0)
+  totalLeetcode   Int      @default(0)
+  totalMistakes   Int      @default(0)
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Quest {
+  id            String          @id @default(cuid())
+  userId        String
+
+  title         String
+  description   String?
+
+  category      QuestCategory
+  difficulty    QuestDifficulty
+
+  expReward     Int
+  penalty       Int             @default(0)
+
+  targetValue   Int?
+  currentValue  Int             @default(0)
+
+  isCompleted   Boolean         @default(false)
+
+  dueDate       DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model DailyLog {
+  id              String   @id @default(cuid())
+  userId          String
+
+  date            DateTime
+
+  sleepHours      Float?
+  waterLiters     Float?
+
+  studyHours      Float?
+  workoutDone     Boolean  @default(false)
+
+  leetcodeSolved  Int      @default(0)
+
+  mistakesCount   Int      @default(0)
+
+  mood            String?
+  journal         String?
+
+  createdAt       DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+model Achievement {
+  id            String               @id @default(cuid())
+
+  title         String               @unique
+  description   String
+  icon          String
+
+  category      AchievementCategory
+  rarity        AchievementRarity
+
+  expReward     Int
+
+  users         UserAchievement[]
+}
+
+model UserAchievement {
+  id              String       @id @default(cuid())
+  userId          String
+  achievementId   String
+
+  unlockedAt      DateTime     @default(now())
+
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement     Achievement  @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+}
+
+model Transaction {
+  id          String               @id @default(cuid())
+  userId      String
+
+  description String
+  category    TransactionCategory
+
+  amount      Float
+  type        TransactionType
+
+  date        DateTime
+  createdAt   DateTime             @default(now())
+
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SavingsGoal {
+  id          String   @id @default(cuid())
+  userId      String
+
+  title       String
+  icon        String
+
+  current     Float    @default(0)
+  target      Float
+
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Budget {
+  id          String               @id @default(cuid())
+  userId      String
+
+  category    TransactionCategory
+  amount      Float
+
+  month       Int
+  year        Int
+
+  createdAt   DateTime             @default(now())
+
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, category, month, year])
+}
+
+model UserSettings {
+  id                 String    @id @default(cuid())
+  userId             String    @unique
+
+  darkMode           Boolean   @default(true)
+  accentColor        String    @default("cyan")
+  compactView        Boolean   @default(false)
+  animations         Boolean   @default(true)
+
+  language           Language  @default(ENGLISH)
+
+  dailyReminder      Boolean   @default(true)
+  streakAlert        Boolean   @default(true)
+  weeklyReport       Boolean   @default(false)
+  achievementPop     Boolean   @default(true)
+  questDeadline      Boolean   @default(true)
+
+  autoComplete       Boolean   @default(true)
+  showExp            Boolean   @default(true)
+  penaltySystem      Boolean   @default(true)
+
+  difficulty         QuestDifficulty @default(NORMAL)
+
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Reflection {
+  id                    String   @id @default(cuid())
+  userId                String
+
+  year                  Int
+
+  greatestAchievement   String?
+  biggestLesson         String?
+  nextYearVision        String?
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, year])
 }
