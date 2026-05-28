@@ -31,6 +31,15 @@ export const registerUser = async (req, res) => {
                 username,
                 email,
                 password: hashedPassword,
+                stats: {
+                    create: {}
+                },
+                settings: {
+                    create: {},
+                }
+            },
+            include: {
+                stats: true,
             }
         });
         const token = generateToken(user.id);
@@ -41,12 +50,7 @@ export const registerUser = async (req, res) => {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                level: user.level,
-                exp: user.exp,
-                currentStreak: user.currentStreak,
-                longestStreak: user.longestStreak,
-                avatar: user.avatar,
-                bio: user.bio,
+                stats: user.stats,
             }
         });
     } catch (error) {
@@ -68,7 +72,10 @@ export const loginUser = async (req, res) => {
         }
 
         const user = await prisma.user.findUnique({
-            where: { email }
+            where: { email },
+            include: {
+                stats: true,
+            }
         });
         if (!user) {
             return res.status(401).json({
@@ -93,12 +100,7 @@ export const loginUser = async (req, res) => {
                 id: user.id,
                 username: user.username,
                 email: user.email,
-                level: user.level,
-                exp: user.exp,
-                currentStreak: user.currentStreak,
-                longestStreak: user.longestStreak,
-                avatar: user.avatar,
-                bio: user.bio
+                stats: user.stats,
             }
         });
     } catch(error) {
@@ -116,12 +118,7 @@ export const getCurrentUser = async (req, res) => {
             id: req.user.id,
             username: req.user.username,
             email: req.user.email,
-            level: req.user.level,
-            exp: req.user.exp,
-            currentStreak: req.user.currentStreak,
-            longestStreak: req.user.longestStreak,
-            avatar: req.user.avatar,
-            bio: req.user.bio,
+            stats: req.user.stats,
         }
     });
 };

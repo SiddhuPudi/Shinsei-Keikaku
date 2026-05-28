@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import "./Auth.css";
+import api from "../services/api.js";
 
 function Auth() {
     const location = useLocation();
@@ -14,21 +15,28 @@ function Auth() {
     const handleToRegister = () => setMode("register");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (isSubmitting) return;
         setIsSubmitting(true);
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-        console.log(mode, data);
-        const username = data.username || data.email.split("@")[0];
-        setTimeout(() => {
-            login({ username, email: data.email });
+        try {
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            const endpoint = mode === "login" ? "/auth/login" : "/auth/register";
+            const res = await api.post(endpoint, data);
+            login(res.data.user, res.data.token);
             setIsSuccess(true);
             setTimeout(() => {
                 navigate("/daily");
             }, 900);
-        }, 800);
+        } catch(error) {
+            console.error(error);
+            alert(
+                error.response?.data?.message || "Something went wrong"
+            );
+        } finally {
+            setIsSubmitting(false);
+        }
     };
     return (
         <div className="auth-page">
