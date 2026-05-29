@@ -22,7 +22,7 @@ function Toggle({ on, onChange }) {
 }
 
 function Settings() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
     const [activeSection, setActiveSection] = useState("Profile");
     const [confirm, setConfirm] = useState(null); // { action: string, label: string }
 
@@ -127,6 +127,7 @@ function Settings() {
                             <div className="settings-actions">
                                 <button className="btn-primary">Save Changes</button>
                                 <button className="btn-secondary">Cancel</button>
+                                <button className="btn-danger" onClick={() => { logout(); }}>Logout</button>
                             </div>
                         </div>
                     )}

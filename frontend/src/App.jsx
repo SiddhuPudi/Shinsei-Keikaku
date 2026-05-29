@@ -11,6 +11,7 @@ import Achievements from "./Pages/Achievements.jsx";
 import Settings from "./Pages/Settings.jsx";
 import Auth from "./Pages/Auth.jsx";
 import Weekly from "./Pages/Weekly.jsx";
+import ProtectedRoute from "./components/ProtectedRoutes.jsx";
 
 function App() {
   return (
@@ -19,15 +20,15 @@ function App() {
       <div className="page-container">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/daily" element={<Daily />} />
-          <Route path="/achievements" element={<Achievements />} />
-          <Route path="/quests" element={<Quests />} />
-          <Route path="/monthly" element={<Monthly />} />
-          <Route path="/yearly" element={<Yearly />} />
-          <Route path="/finance" element={<Finance />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/daily" element={<ProtectedRoute><Daily /></ProtectedRoute>} />
+          <Route path="/achievements" element={<ProtectedRoute><Achievements /></ProtectedRoute>} />
+          <Route path="/quests" element={<ProtectedRoute><Quests /></ProtectedRoute>} />
+          <Route path="/monthly" element={<ProtectedRoute><Monthly /></ProtectedRoute>} />
+          <Route path="/yearly" element={<ProtectedRoute><Yearly /></ProtectedRoute>} />
+          <Route path="/finance" element={<ProtectedRoute><Finance /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          <Route path="/weekly" element={<ProtectedRoute><Weekly /></ProtectedRoute>} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/weekly" element={<Weekly />} />
         </Routes>
       </div>
     </BrowserRouter>
