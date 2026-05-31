@@ -192,7 +192,7 @@ model Transaction {
   description String
   category    TransactionCategory
 
-  amount      Float
+  amount      Decimal
   type        TransactionType
 
   date        DateTime
@@ -210,6 +210,7 @@ model SavingsGoal {
 
   current     Float    @default(0)
   target      Float
+  completed   Boolean  @default(false)
 
   createdAt   DateTime @default(now())
 
@@ -221,7 +222,7 @@ model Budget {
   userId      String
 
   category    TransactionCategory
-  amount      Float
+  amount      Decimal
 
   month       Int
   year        Int
