@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import testRoutes from "./routes/testRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import financeRoutes from "./routes/financeRoutes.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(cors({
 app.use(express.json());
 app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/finance", financeRoutes);
 
 app.get("/", (req, res) => {
     res.status(200).json({
