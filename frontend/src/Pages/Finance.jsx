@@ -1,7 +1,8 @@
 import "./Finance.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getTransactions, createTransaction, deleteTransaction } from "../api/financeApi";
 
-const CATEGORY_OPTIONS = ["food", "fitness", "learning", "entertainment", "transport", "health", "shopping", "other"];
+const CATEGORY_OPTIONS = ["food", "fitness", "learning", "entertainment", "transport", "health", "shopping", "housing", "savings", "other"];
 const GOAL_ICONS = ["🛡️", "💻", "✈️", "🏠", "🚗", "🎓", "💍", "🎮", "💪", "📈"];
 
 const MONTH_LABELS = {
@@ -9,39 +10,6 @@ const MONTH_LABELS = {
     "05": "May", "06": "June", "07": "July", "08": "August",
     "09": "September", "10": "October", "11": "November", "12": "December",
 };
-
-const initialTransactions = [
-    /* ── January 2025 ── */
-    { id: "t-j1", date: "2025-01-01", desc: "Salary", category: "income", amount: 45000, type: "income" },
-    { id: "t-j2", date: "2025-01-03", desc: "Rent", category: "housing", amount: -12000, type: "expense" },
-    { id: "t-j3", date: "2025-01-05", desc: "Grocery Shopping", category: "food", amount: -2800, type: "expense" },
-    { id: "t-j4", date: "2025-01-08", desc: "Gym Membership", category: "fitness", amount: -1200, type: "expense" },
-    { id: "t-j5", date: "2025-01-10", desc: "Online Course", category: "learning", amount: -1500, type: "expense" },
-    { id: "t-j6", date: "2025-01-14", desc: "Netflix", category: "entertainment", amount: -649, type: "expense" },
-    { id: "t-j7", date: "2025-01-18", desc: "Transport", category: "transport", amount: -600, type: "expense" },
-    { id: "t-j8", date: "2025-01-22", desc: "Freelance Side Work", category: "income", amount: 6000, type: "income" },
-    { id: "t-j9", date: "2025-01-25", desc: "Medicine", category: "health", amount: -420, type: "expense" },
-    { id: "t-j10", date: "2025-01-28", desc: "Coffee", category: "food", amount: -380, type: "expense" },
-    /* ── February 2025 ── */
-    { id: "t-f1", date: "2025-02-01", desc: "Salary", category: "income", amount: 45000, type: "income" },
-    { id: "t-f2", date: "2025-02-02", desc: "Rent", category: "housing", amount: -12000, type: "expense" },
-    { id: "t-f3", date: "2025-02-05", desc: "Grocery Shopping", category: "food", amount: -3100, type: "expense" },
-    { id: "t-f4", date: "2025-02-07", desc: "Gym Membership", category: "fitness", amount: -1200, type: "expense" },
-    { id: "t-f5", date: "2025-02-10", desc: "Book Purchase", category: "learning", amount: -320, type: "expense" },
-    { id: "t-f6", date: "2025-02-12", desc: "Spotify", category: "entertainment", amount: -119, type: "expense" },
-    { id: "t-f7", date: "2025-02-15", desc: "Freelance Payment", category: "income", amount: 10000, type: "income" },
-    { id: "t-f8", date: "2025-02-18", desc: "Transport", category: "transport", amount: -750, type: "expense" },
-    { id: "t-f9", date: "2025-02-22", desc: "Shopping", category: "shopping", amount: -2400, type: "expense" },
-    { id: "t-f10", date: "2025-02-27", desc: "Coffee & Dining", category: "food", amount: -680, type: "expense" },
-    /* ── March 2025 ── */
-    { id: "t-m1", date: "2025-03-01", desc: "Salary", category: "income", amount: 45000, type: "income" },
-    { id: "t-m2", date: "2025-03-01", desc: "Netflix", category: "entertainment", amount: -649, type: "expense" },
-    { id: "t-m3", date: "2025-03-02", desc: "Online Course", category: "learning", amount: -1500, type: "expense" },
-    { id: "t-m4", date: "2025-03-03", desc: "Freelance Payment", category: "income", amount: 8500, type: "income" },
-    { id: "t-m5", date: "2025-03-03", desc: "Gym Membership", category: "fitness", amount: -1200, type: "expense" },
-    { id: "t-m6", date: "2025-03-04", desc: "Grocery Shopping", category: "food", amount: -850, type: "expense" },
-    { id: "t-m7", date: "2025-03-05", desc: "Coffee", category: "food", amount: -180, type: "expense" },
-];
 
 /* ── Helpers ──────────────────────────────────────────────────────────────── */
 function buildMonthlyBreakdown(txns) {
@@ -79,7 +47,8 @@ const budgetCategories = [
 const categoryColors = {
     food: "#fb7185", income: "#34d399", fitness: "#38bdf8",
     learning: "#a78bfa", entertainment: "#f59e0b", transport: "#34d399",
-    health: "#f472b6", shopping: "#facc15", other: "#9ca3af",
+    health: "#f472b6", shopping: "#facc15", housing: "#60a5fa",
+    savings: "#00cfff", other: "#9ca3af",
 };
 
 const initialSavingsGoals = [
@@ -96,18 +65,25 @@ function AddTransactionModal({ onClose, onAdd }) {
     });
     const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
-    const handleSubmit = () => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const handleSubmit = async () => {
+        setIsSubmitting(true);
+
         if (!form.desc.trim() || !form.amount) return;
         const amt = Number(form.amount);
-        onAdd({
-            id: crypto.randomUUID(),
-            desc: form.desc,
-            type: form.type,
-            category: form.type === "income" ? "income" : form.category,
-            amount: form.type === "income" ? amt : -amt,
-            date: form.date,
-        });
-        onClose();
+        try {
+            await onAdd({
+                id: crypto.randomUUID(),
+                desc: form.desc,
+                type: form.type,
+                category: form.type === "income" ? "income" : form.category,
+                amount: form.type === "income" ? amt : -amt,
+                date: form.date,
+            });
+            onClose();
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -170,12 +146,21 @@ function AddTransactionModal({ onClose, onAdd }) {
                 )}
 
                 <p className="fin-auto-classify">
-                    {form.type === "income" ? "✅ Will be classified as income" : "� Will be tagged under selected category"}
+                    {form.type === "income" ? "✅ Will be classified as income" : "🏷️ Will be tagged under selected category"}
                 </p>
 
                 <div className="fin-modal-actions">
                     <button className="fin-cancel-btn" onClick={onClose}>Cancel</button>
-                    <button className="fin-create-btn" onClick={handleSubmit}>+ Add</button>
+                    <button className="fin-create-btn" onClick={handleSubmit} disabled={isSubmitting}>
+                        {isSubmitting ? (
+                            <>
+                                <span className="spinner"></span>
+                                Creating...
+                            </>
+                        ) : (
+                            "+ Add"
+                        )}
+                    </button>
                 </div>
             </div>
         </div>
@@ -284,18 +269,70 @@ function Finance() {
     const [activeTab, setActiveTab] = useState("overview");
     const [txFilter, setTxFilter] = useState("all");
     const [analysisPeriod, setAnalysisPeriod] = useState("monthly");
-    const [transactions, setTransactions] = useState(initialTransactions);
+    const [transactions, setTransactions] = useState([]);
     const [goals, setGoals] = useState(initialSavingsGoals);
     const [showTxModal, setShowTxModal] = useState(false);
     const [showGoalModal, setShowGoalModal] = useState(false);
+
+    useEffect(() => {
+        fetchTransactions();
+    }, []);
+    const fetchTransactions = async () => {
+        try {
+            const data = await getTransactions();
+            const formatted = data.map(tx => ({
+                ...tx,
+                desc: tx.description,
+                category: tx.category.toLowerCase(),
+                type: tx.type.toLowerCase(),
+                amount: tx.type === "EXPENSE" ? -Number(tx.amount) : Number(tx.amount),
+                date: tx.date.split("T")[0],
+            }));
+            setTransactions(formatted);
+        } catch (error) {
+            console.error("Failed to load transactions:", error);
+        }
+    };
 
     const filteredTx = transactions.filter(t => txFilter === "all" ? true : t.type === txFilter);
     const totalIncome = transactions.filter(t => t.type === "income").reduce((s, t) => s + t.amount, 0);
     const totalExpense = Math.abs(transactions.filter(t => t.type === "expense").reduce((s, t) => s + t.amount, 0));
     const netBalance = totalIncome - totalExpense;
 
-    const addTransaction = tx => setTransactions(prev => [tx, ...prev]);
+    const addTransaction = async(tx) => {
+        try {
+            const created = await createTransaction({
+                description: tx.desc,
+                category: tx.type === "income" ? "OTHER" : tx.category.toUpperCase(),
+                amount: Math.abs(tx.amount),
+                type: tx.type.toUpperCase(),
+                date: tx.date,
+            });
+            setTransactions(prev => [
+                {
+                    ...created,
+                    desc: created.description,
+                    category: created.category.toLowerCase(),
+                    type: created.type.toLowerCase(),
+                    amount: created.type === "EXPENSE" ? -Number(created.amount) : Number(created.amount),
+                    date: created.date.split("T")[0],
+                },
+                ...prev,
+            ]);
+        } catch(error) {
+            console.error("Failed to create transaction:", error);
+        }
+    };
+    const handleDeleteTransaction = async (id) => {
+        try{
+            await deleteTransaction(id);
+            setTransactions(prev => prev.filter(tx => tx.id !== id));
+        } catch(error) {
+            console.error("Failed to delete transaction:", error);
+        }
+    };
     const addGoal = g => setGoals(prev => [g, ...prev]);
+    const savingsRate = totalIncome > 0 ? Math.round(((totalIncome - totalExpense) / totalIncome) * 100) : 0;
 
     const TAB_LABELS = {
         overview: "📊 Overview",
@@ -347,7 +384,7 @@ function Finance() {
                         <div className="balance-card">
                             <span className="bal-label">Savings Rate</span>
                             <span className="bal-value" style={{ color: "#a78bfa" }}>
-                                {Math.round(((totalIncome - totalExpense) / totalIncome) * 100)}%
+                                {savingsRate}%
                             </span>
                         </div>
                     </div>
@@ -391,9 +428,23 @@ function Finance() {
                                     <span className="tx-cat-badge" style={{ color: categoryColors[t.category], background: `${categoryColors[t.category]}18` }}>
                                         {t.category}
                                     </span>
-                                    <span className={`tx-amount ${t.type}`}>
-                                        {t.type === "income" ? "+" : "-"}₹{Math.abs(t.amount).toLocaleString()}
-                                    </span>
+                                    <div className="tx-actions">
+                                        <span className={`tx-amount ${t.type}`}>
+                                            {t.type === "income" ? "+" : "-"}
+                                            ₹{Math.abs(t.amount).toLocaleString()}
+                                        </span>
+                                        <button
+                                            className="tx-delete-btn"
+                                            onClick={() => {
+                                                const confirmed = window.confirm("Are you sure to delete this transaction?");
+                                                if (confirmed) {
+                                                    handleDeleteTransaction(t.id);
+                                                }
+                                            }}
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -434,9 +485,22 @@ function Finance() {
                                 <span className="tx-cat-badge" style={{ color: categoryColors[t.category], background: `${categoryColors[t.category]}18` }}>
                                     {t.category}
                                 </span>
-                                <span className={`tx-amount ${t.type}`}>
-                                    {t.type === "income" ? "+" : "-"}₹{Math.abs(t.amount).toLocaleString()}
-                                </span>
+                                <div className="tx-actions">
+                                    <span className={`tx-amount ${t.type}`}>
+                                        {t.type === "income" ? "+" : "-"}₹{Math.abs(t.amount).toLocaleString()}
+                                    </span>
+                                    <button
+                                        className="tx-delete-btn"
+                                        onClick={() => {
+                                            const confirmed = window.confirm("Are you sure to delete this transaction?");
+                                            if (confirmed) {
+                                                handleDeleteTransaction(t.id);
+                                            }
+                                        }}
+                                    >
+                                        🗑️
+                                    </button>
+                                </div>  
                             </div>
                         ))}
                     </div>
