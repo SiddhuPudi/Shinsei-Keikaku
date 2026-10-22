@@ -1,5 +1,23 @@
 import prisma from "../config/prisma.js";
 
+export const VALID_TRANSACTION_CATEGORIES = [
+    "FOOD",
+    "FITNESS",
+    "LEARNING",
+    "ENTERTAINMENT",
+    "TRANSPORT",
+    "HEALTH",
+    "SHOPPING",
+    "HOUSING",
+    "SAVINGS",
+    "OTHER",
+];
+
+export const VALID_TRANSACTION_TYPES = [
+    "INCOME",
+    "EXPENSE",
+];
+
 export const getTransaction = async (req, res) => {
     try {
         const transactions = await prisma.transaction.findMany({
@@ -13,16 +31,16 @@ export const getTransaction = async (req, res) => {
         const formatted = transactions.map((tx) => ({
             ...tx,
             amount: Number(tx.amount),
-            
         }));
         res.status(200).json({
             success: true,
             transactions: formatted,
         });
-    } catch(error) {
+    } catch (error) {
+        console.error("Error retrieving transactions:", error);
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to retrieve transactions",
         });
     }
 };
@@ -35,17 +53,82 @@ export const createTransaction = async (req, res) => {
             amount,
             type,
             date,
-        } = req.body;
+        } = req.body || {};
+
+        if (!description || typeof description !== "string" || !description.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Description is required",
+            });
+        }
+
+        if (category === undefined || category === null || category === "") {
+            return res.status(400).json({
+                success: false,
+                message: "Category is required",
+            });
+        }
+
+        const normalizedCategory = String(category).trim().toUpperCase();
+        if (!VALID_TRANSACTION_CATEGORIES.includes(normalizedCategory)) {
+            return res.status(400).json({
+                success: false,
+                message: `Invalid category. Allowed: ${VALID_TRANSACTION_CATEGORIES.join(", ")}`,
+            });
+        }
+
+        if (amount === undefined || amount === null || amount === "") {
+            return res.status(400).json({
+                success: false,
+                message: "Amount is required",
+            });
+        }
+
+        const numAmount = Number(amount);
+        if (isNaN(numAmount) || numAmount <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Amount must be a positive number",
+            });
+        }
+
+        if (type === undefined || type === null || type === "") {
+            return res.status(400).json({
+                success: false,
+                message: "Transaction type is required (INCOME or EXPENSE)",
+            });
+        }
+
+        const normalizedType = String(type).trim().toUpperCase();
+        if (!VALID_TRANSACTION_TYPES.includes(normalizedType)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid transaction type. Allowed: INCOME, EXPENSE",
+            });
+        }
+
+        let parsedDate = new Date();
+        if (date !== undefined && date !== null && date !== "") {
+            parsedDate = new Date(date);
+            if (isNaN(parsedDate.getTime())) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid date format. Expected YYYY-MM-DD or ISO 8601 string",
+                });
+            }
+        }
+
         const transaction = await prisma.transaction.create({
             data: {
                 userId: req.user.id,
-                description,
-                category,
-                amount,
-                type,
-                date: new Date(date),
+                description: description.trim(),
+                category: normalizedCategory,
+                amount: numAmount,
+                type: normalizedType,
+                date: parsedDate,
             },
         });
+
         res.status(201).json({
             success: true,
             transaction: {
@@ -54,39 +137,59 @@ export const createTransaction = async (req, res) => {
             },
         });
     } catch (error) {
+        console.error("Error creating transaction:", error);
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to create transaction",
         });
     }
 };
 
-export const deleteTransaction = async(req, res) => {
-    try{
-        const transaction = await prisma.transaction.findUnique({
-            where: {
-                id: req.params.id,
-            },
-        });
-        if (!transaction) {
-            res.status(404).json({
+export const deleteTransaction = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id || typeof id !== "string" || !id.trim()) {
+            return res.status(400).json({
                 success: false,
-                message: "Not authorized",
+                message: "Valid transaction ID is required",
             });
         }
-        await prisma.transaction.delete({
+
+        const transaction = await prisma.transaction.findUnique({
             where: {
-                id: req.params.id,
+                id: id.trim(),
             },
         });
+
+        if (!transaction) {
+            return res.status(404).json({
+                success: false,
+                message: "Transaction not found",
+            });
+        }
+
+        if (transaction.userId !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Not authorized to access this transaction",
+            });
+        }
+
+        await prisma.transaction.delete({
+            where: {
+                id: id.trim(),
+            },
+        });
+
         res.status(200).json({
             success: true,
             message: "Transaction deleted",
         });
-    } catch(error) {
+    } catch (error) {
+        console.error("Error deleting transaction:", error);
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to delete transaction",
         });
     }
 };
@@ -119,9 +222,17 @@ export const getSavingsGoals = async (req, res) => {
 
 export const getSavingsGoalById = async (req, res) => {
     try {
+        const { id } = req.params;
+        if (!id || typeof id !== "string" || !id.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Valid savings goal ID is required",
+            });
+        }
+
         const goal = await prisma.savingsGoal.findUnique({
             where: {
-                id: req.params.id,
+                id: id.trim(),
             },
         });
 
@@ -145,9 +256,10 @@ export const getSavingsGoalById = async (req, res) => {
             savingsGoal: goal,
         });
     } catch (error) {
+        console.error("Error retrieving savings goal:", error);
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to retrieve savings goal",
         });
     }
 };
@@ -224,10 +336,17 @@ export const createSavingsGoal = async (req, res) => {
 export const updateSavingsGoal = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, target, current, progress, icon, completed } = req.body;
+        if (!id || typeof id !== "string" || !id.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Valid savings goal ID is required",
+            });
+        }
+
+        const { title, target, current, progress, icon, completed } = req.body || {};
 
         const existingGoal = await prisma.savingsGoal.findUnique({
-            where: { id },
+            where: { id: id.trim() },
         });
 
         if (!existingGoal) {
@@ -307,7 +426,7 @@ export const updateSavingsGoal = async (req, res) => {
         }
 
         const updatedGoal = await prisma.savingsGoal.update({
-            where: { id },
+            where: { id: id.trim() },
             data: updatedData,
         });
 
@@ -318,9 +437,10 @@ export const updateSavingsGoal = async (req, res) => {
             message: "Savings goal updated successfully",
         });
     } catch (error) {
+        console.error("Error updating savings goal:", error);
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to update savings goal",
         });
     }
 };
@@ -328,9 +448,15 @@ export const updateSavingsGoal = async (req, res) => {
 export const deleteSavingsGoal = async (req, res) => {
     try {
         const { id } = req.params;
+        if (!id || typeof id !== "string" || !id.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Valid savings goal ID is required",
+            });
+        }
 
         const existingGoal = await prisma.savingsGoal.findUnique({
-            where: { id },
+            where: { id: id.trim() },
         });
 
         if (!existingGoal) {
@@ -348,7 +474,7 @@ export const deleteSavingsGoal = async (req, res) => {
         }
 
         await prisma.savingsGoal.delete({
-            where: { id },
+            where: { id: id.trim() },
         });
 
         res.status(200).json({
@@ -356,9 +482,10 @@ export const deleteSavingsGoal = async (req, res) => {
             message: "Savings goal deleted successfully",
         });
     } catch (error) {
+        console.error("Error deleting savings goal:", error);
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to delete savings goal",
         });
     }
 };
@@ -464,9 +591,15 @@ export const getBudgets = async (req, res) => {
 export const getBudgetById = async (req, res) => {
     try {
         const { id } = req.params;
+        if (!id || typeof id !== "string" || !id.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Valid budget ID is required",
+            });
+        }
 
         const budget = await prisma.budget.findUnique({
-            where: { id },
+            where: { id: id.trim() },
         });
 
         if (!budget) {
@@ -491,9 +624,10 @@ export const getBudgetById = async (req, res) => {
             },
         });
     } catch (error) {
+        console.error("Error retrieving budget:", error);
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to retrieve budget",
         });
     }
 };
@@ -609,10 +743,17 @@ export const createBudget = async (req, res) => {
 export const updateBudget = async (req, res) => {
     try {
         const { id } = req.params;
-        const { category, amount, month, year } = req.body;
+        if (!id || typeof id !== "string" || !id.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Valid budget ID is required",
+            });
+        }
+
+        const { category, amount, month, year } = req.body || {};
 
         const existingBudget = await prisma.budget.findUnique({
-            where: { id },
+            where: { id: id.trim() },
         });
 
         if (!existingBudget) {
@@ -708,7 +849,7 @@ export const updateBudget = async (req, res) => {
                 },
             });
 
-            if (duplicate && duplicate.id !== id) {
+            if (duplicate && duplicate.id !== id.trim()) {
                 return res.status(409).json({
                     success: false,
                     message: `A budget for category '${finalCategory}' in ${finalMonth}/${finalYear} already exists`,
@@ -717,7 +858,7 @@ export const updateBudget = async (req, res) => {
         }
 
         const updated = await prisma.budget.update({
-            where: { id },
+            where: { id: id.trim() },
             data: updatedData,
         });
 
@@ -730,9 +871,10 @@ export const updateBudget = async (req, res) => {
             message: "Budget updated successfully",
         });
     } catch (error) {
+        console.error("Error updating budget:", error);
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to update budget",
         });
     }
 };
@@ -740,9 +882,15 @@ export const updateBudget = async (req, res) => {
 export const deleteBudget = async (req, res) => {
     try {
         const { id } = req.params;
+        if (!id || typeof id !== "string" || !id.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Valid budget ID is required",
+            });
+        }
 
         const existingBudget = await prisma.budget.findUnique({
-            where: { id },
+            where: { id: id.trim() },
         });
 
         if (!existingBudget) {
@@ -760,7 +908,7 @@ export const deleteBudget = async (req, res) => {
         }
 
         await prisma.budget.delete({
-            where: { id },
+            where: { id: id.trim() },
         });
 
         res.status(200).json({
@@ -768,9 +916,10 @@ export const deleteBudget = async (req, res) => {
             message: "Budget deleted successfully",
         });
     } catch (error) {
+        console.error("Error deleting budget:", error);
         res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Failed to delete budget",
         });
     }
 };
