@@ -1,5 +1,5 @@
 import "./Daily.css";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 
 function Daily() {
     const [quests, setQuests] = useState([
@@ -48,13 +48,18 @@ function Daily() {
         return Math.max(0, diff / 3600000);
     };
 
-    useEffect (() => {
-        const { start, end } = dailyStats.study;
-        if (!start || !end) return;
-        const hrs = (new Date(end) - new Date(start)) / 3600000;
-        const shouldBeDone = hrs >= 1;
-        setQuests(prev => prev.map(q => q.id === "study" && q.done !== shouldBeDone? { ...q, done: shouldBeDone } : q))
-    }, [dailyStats.study.start, dailyStats.study.end]);
+    const updateStudy = (field, value) => {
+        setDailyStats(prev => {
+            const nextStudy = { ...prev.study, [field]: value };
+            const { start, end } = nextStudy;
+            if (start && end) {
+                const hrs = (new Date(end) - new Date(start)) / 3600000;
+                const shouldBeDone = hrs >= 1;
+                setQuests(qPrev => qPrev.map(q => q.id === "study" && q.done !== shouldBeDone ? { ...q, done: shouldBeDone } : q));
+            }
+            return { ...prev, study: nextStudy };
+        });
+    };
 
     const calculateDuration = (start, end) => {
         if(!start || !end) return "-- hrs -- mins";
@@ -125,7 +130,7 @@ function Daily() {
             {/* Daily Quests */}
             <div className = "daily-card">
                 <h2>Daily Quests</h2>
-                {quests.map((q,i) => (
+                {quests.map((q) => (
                     <div className = "quest-item" key={q.id}>
                         <div className = "quest-main">
                             <label className = "custom-checkbox">
@@ -329,11 +334,7 @@ function Daily() {
                             <input
                                 type="datetime-local"
                                 value={dailyStats.study.start}
-                                onChange = { (e) => 
-                                    setDailyStats(prev => ({
-                                        ...prev, study: { ...prev.study, start: e.target.value }
-                                    }))
-                                } 
+                                onChange = { (e) => updateStudy("start", e.target.value) } 
                             />
                         </label>
                         <label>
@@ -341,11 +342,7 @@ function Daily() {
                             <input
                                 type="datetime-local"
                                 value={dailyStats.study.end}
-                                onChange = { (e) => 
-                                    setDailyStats(prev => ({
-                                        ...prev, study: { ...prev.study, end: e.target.value }
-                                    }))
-                                } 
+                                onChange = { (e) => updateStudy("end", e.target.value) } 
                             />
                         </label>
                         <p className = "muted-text">Total Study Time: {calculateStudyDuration()}</p>

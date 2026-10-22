@@ -67,9 +67,9 @@ function AddTransactionModal({ onClose, onAdd }) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const handleSubmit = async () => {
+        if (!form.desc.trim() || !form.amount || isNaN(Number(form.amount)) || Number(form.amount) <= 0) return;
+        if (isSubmitting) return;
         setIsSubmitting(true);
-
-        if (!form.desc.trim() || !form.amount) return;
         const amt = Number(form.amount);
         try {
             await onAdd({
@@ -175,12 +175,12 @@ function AddGoalModal({ onClose, onAdd }) {
     const set = (key, val) => setForm(f => ({ ...f, [key]: val }));
 
     const handleSubmit = () => {
-        if (!form.title.trim() || !form.target) return;
+        if (!form.title.trim() || !form.target || isNaN(Number(form.target)) || Number(form.target) <= 0) return;
         onAdd({
             id: crypto.randomUUID(),
             title: form.title,
             target: Number(form.target),
-            current: Number(form.current),
+            current: Math.max(0, Number(form.current) || 0),
             icon: form.icon,
         });
         onClose();
@@ -275,24 +275,27 @@ function Finance() {
     const [showGoalModal, setShowGoalModal] = useState(false);
 
     useEffect(() => {
-        fetchTransactions();
+        let mounted = true;
+        getTransactions()
+            .then(data => {
+                if (!mounted) return;
+                const formatted = data.map(tx => ({
+                    ...tx,
+                    desc: tx.description,
+                    category: tx.category.toLowerCase(),
+                    type: tx.type.toLowerCase(),
+                    amount: tx.type === "EXPENSE" ? -Number(tx.amount) : Number(tx.amount),
+                    date: tx.date.split("T")[0],
+                }));
+                setTransactions(formatted);
+            })
+            .catch(error => {
+                console.error("Failed to load transactions:", error);
+            });
+        return () => {
+            mounted = false;
+        };
     }, []);
-    const fetchTransactions = async () => {
-        try {
-            const data = await getTransactions();
-            const formatted = data.map(tx => ({
-                ...tx,
-                desc: tx.description,
-                category: tx.category.toLowerCase(),
-                type: tx.type.toLowerCase(),
-                amount: tx.type === "EXPENSE" ? -Number(tx.amount) : Number(tx.amount),
-                date: tx.date.split("T")[0],
-            }));
-            setTransactions(formatted);
-        } catch (error) {
-            console.error("Failed to load transactions:", error);
-        }
-    };
 
     const filteredTx = transactions.filter(t => txFilter === "all" ? true : t.type === txFilter);
     const totalIncome = transactions.filter(t => t.type === "income").reduce((s, t) => s + t.amount, 0);
