@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import financeRoutes from "./routes/financeRoutes.js";
 import dailyRoutes from "./routes/dailyRoutes.js";
 import questRoutes from "./routes/questRoutes.js";
+import achievementRoutes from "./routes/achievementRoutes.js";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use("/api/finance", financeRoutes);
 app.use("/api/daily", dailyRoutes);
 app.use("/api/daily-logs", dailyRoutes);
 app.use("/api/quests", questRoutes);
+app.use("/api/achievements", achievementRoutes);
 
 app.get("/", (req, res) => {
     res.status(200).json({
