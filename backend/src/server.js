@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import testRoutes from "./routes/testRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import financeRoutes from "./routes/financeRoutes.js";
+import dailyRoutes from "./routes/dailyRoutes.js";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/finance", financeRoutes);
+app.use("/api/daily", dailyRoutes);
+app.use("/api/daily-logs", dailyRoutes);
 
 app.get("/", (req, res) => {
     res.status(200).json({
