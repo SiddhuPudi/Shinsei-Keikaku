@@ -10,6 +10,7 @@ import achievementRoutes from "./routes/achievementRoutes.js";
 import reflectionRoutes from "./routes/reflectionRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use("/api/reflections", reflectionRoutes);
 app.use("/api/profile", userRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/", (req, res) => {
     res.status(200).json({
