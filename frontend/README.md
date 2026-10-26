@@ -19,17 +19,18 @@
 
 This is the **frontend client** for Shinsei Keikaku (新生計画 — *New Life Plan*), a gamified personal growth web application. Built with React 19 and Vite, it features a fully designed glassmorphism UI across **10 pages** and **6 reusable components**, delivering a complete RPG-style productivity experience.
 
-> **Note:** This frontend is currently self-contained with mock/local data. All state is managed via React Context API and `localStorage`. The backend integration is planned for a future phase.
+> **Backend Integration:** This frontend communicates with the **Shinsei Keikaku Backend** (`http://localhost:3000/api`) using Axios. User sessions are secured via JWT tokens, protected routes (`/daily`, `/quests`, `/finance`, `/settings`, etc.), and transactions are dynamically synchronized with the PostgreSQL database.
 
 ---
 
 ## 🛠️ Tech Stack
 
 | Technology | Version | Role |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | **React** | `19.2.0` | UI framework with hooks (`useState`, `useEffect`, `useMemo`, `useContext`, `useRef`) |
 | **React DOM** | `19.2.0` | DOM rendering + `createPortal` for floating panels |
 | **React Router DOM** | `7.10.0` | Client-side routing with `BrowserRouter`, `Routes`, `Link`, `useNavigate`, `useLocation` |
+| **Axios** | `1.16.1` | HTTP client with automatic JWT `Bearer` token request interceptor |
 | **Vite** | `7.2.4` | Dev server, HMR, and production bundler |
 | **ESLint** | `9.39.1` | Code linting with React Hooks & Refresh plugins |
 | **Vanilla CSS** | — | Custom glassmorphism styling with gradients, animations, and CSS variables |
@@ -77,6 +78,9 @@ npm run lint
 frontend/
 ├── public/
 ├── src/
+│   ├── api/                               # Feature API clients
+│   │   └── financeApi.js                  # Finance transaction API calls
+│   │
 │   ├── assets/
 │   │   └── react.svg                      # App icon asset
 │   │
@@ -89,12 +93,16 @@ frontend/
 │   │   ├── PlayerStatusPanel.css
 │   │   ├── FriendsPanel.jsx               # Rangers system (friends management)
 │   │   ├── FriendsPanel.css
+│   │   ├── ProtectedRoutes.jsx            # Route guard redirecting unauthenticated users
 │   │   ├── QuickAccessGrid.jsx            # Dashboard navigation card grid
 │   │   ├── QuickAccessCard.jsx            # Individual quick access card
 │   │   └── QuickAccess.css
 │   │
 │   ├── context/                           # Global state management
-│   │   └── AuthContext.jsx                # Auth provider (login/logout/localStorage)
+│   │   └── AuthContext.jsx                # Auth provider (login/logout/token storage)
+│   │
+│   ├── services/                          # Network services
+│   │   └── api.js                         # Axios client with JWT interceptor
 │   │
 │   ├── Pages/                             # Application pages (10 total)
 │   │   ├── Home.jsx / Home.css            # Landing hero + authenticated dashboard
@@ -109,10 +117,10 @@ frontend/
 │   │   └── Settings.jsx / Settings.css    # App settings (6 sections)
 │   │
 │   ├── App.jsx                            # Root component with route definitions
-│   ├── App.css                            # App-level styles
-│   ├── main.jsx                           # Entry point — StrictMode + AuthProvider
-│   └── index.css                          # Global base styles
-│
+│   │   ├── App.css                            # App-level styles
+│   │   ├── main.jsx                           # Entry point — StrictMode + AuthProvider
+│   │   └── index.css                          # Global base styles
+│   │
 ├── index.html                             # HTML entry point
 ├── package.json
 ├── vite.config.js
@@ -126,7 +134,7 @@ frontend/
 All routes are defined in `App.jsx` using React Router v7:
 
 | Route | Page Component | Description |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | `/` | `Home` | Landing page (unauthenticated) / Dashboard (authenticated) |
 | `/auth` | `Auth` | Login & Register with animated sliding panel |
 | `/daily` | `Daily` | Daily habit tracking, quests, calendar, reflections |
@@ -145,11 +153,13 @@ All routes are defined in `App.jsx` using React Router v7:
 ### 🏠 Home Page (`/`)
 
 **Unauthenticated view:**
+
 - Hero landing with Japanese kanji logo (新)
 - Glowing animated title with tagline *"Track. Grow. Evolve."*
 - Sign In / Sign Up navigation buttons
 
 **Authenticated Dashboard:**
+
 - `DashboardHeader` — personalized welcome greeting
 - `PlayerStatusPanel` — avatar with level badge, EXP bar (0/100), rank (*E-Rank Trainee*), and 5 combat stats:
   - 💪 Strength · 🧠 Intellect · ⚡️ Discipline · ❤️ Vitality · 🎯 Focus
@@ -259,7 +269,7 @@ All routes are defined in `App.jsx` using React Router v7:
 **5-tab system:**
 
 | Tab | Features |
-|:---|:---|
+| :--- | :--- |
 | **📊 Overview** | Net balance, total income/expense, savings rate cards; budget category bars (6 categories); recent transactions list |
 | **📋 Transactions** | Full transaction list with type filters (all/income/expense); add transaction modal with type toggle, category selector, date picker |
 | **🗂️ Budgets** | Detailed budget view with per-category spend vs. budget, remaining amount, overspend alerts |
@@ -279,7 +289,7 @@ All routes are defined in `App.jsx` using React Router v7:
 **6-section sidebar layout:**
 
 | Section | Features |
-|:---|:---|
+| :--- | :--- |
 | **👤 Profile** | Avatar with initial, username, email, bio textarea, password change with confirmation |
 | **⚙️ Preferences** | Dark mode toggle, compact view toggle, animations toggle, language select (English / 日本語 / हिन्दी), accent color picker (cyan / purple / pink / green / orange) |
 | **🔔 Notifications** | 5 toggles: Daily Reminder, Streak Alert, Weekly Report, Achievement Unlocked, Quest Deadline |
@@ -296,11 +306,12 @@ All routes are defined in `App.jsx` using React Router v7:
 ### Global Components
 
 | Component | File | Description |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | `Header` | `components/Header.jsx` | Persistent top navigation bar. Shows logo (新 kanji), title, nav links (Daily/Quests/Achievements/Weekly/Monthly/Yearly/Finance/Settings — visible only when authenticated), username display, and Login/Logout button. |
 | `DashboardHeader` | `components/DashboardHeader.jsx` | Simple welcome header displaying `"Welcome back, {username}"` on the dashboard. |
 | `PlayerStatusPanel` | `components/PlayerStatusPanel.jsx` | Left-side dashboard panel: avatar circle with initial, level badge (Lvl 1), player name, rank (E-Rank Trainee), EXP bar (0/100), and 5 stat bars (Strength, Intellect, Discipline, Vitality, Focus). Includes Rangers button that opens the FriendsPanel. |
 | `FriendsPanel` | `components/FriendsPanel.jsx` | Floating panel rendered via React `createPortal` to escape stacking contexts. Contains 3 tabs: Friends list (with online dots), Search (username-based with send request + toast), Requests (accept/decline). 8 mock search users, 3 initial friends, 2 initial pending requests. |
+| `ProtectedRoutes` | `components/ProtectedRoutes.jsx` | Route guard component that checks authentication state (`useAuth().user` and `loading`); displays loading spinner or redirects unauthenticated visitors to `/auth`. |
 | `QuickAccessGrid` | `components/QuickAccessGrid.jsx` | 2×2 grid of `QuickAccessCard` components linking to Daily Tracking, Quest Log, Analytics, and Finance Tracker with icons and descriptions. |
 | `QuickAccessCard` | `components/QuickAccessCard.jsx` | Individual card component accepting `icon`, `title`, `desc`, and `to` (route path) props. Renders as a navigable link. |
 
@@ -310,21 +321,23 @@ All routes are defined in `App.jsx` using React Router v7:
 
 ### AuthContext (`context/AuthContext.jsx`)
 
-Provides global authentication state via React Context API:
+Provides global authentication and session state via React Context API:
 
 ```jsx
 // Exposed values
 {
-  user,              // { username, email } | null
-  isAuthenticated,   // boolean
-  login({ username, email }),   // stores to localStorage key "shinsei_user"
-  logout()           // clears localStorage and resets state
+  user,              // { id, username, email, ... } | null
+  loading,           // boolean (true while validating token via GET /api/auth/me)
+  isAuthenticated,   // boolean (!!user)
+  login(userData, token), // saves token to "shinsei_token" & updates state
+  logout()           // removes token from localStorage and resets user state
 }
 ```
 
-- **Persistence**: User session persists across page refreshes via `localStorage`
+- **Persistence**: Validates session on startup via `GET /api/auth/me` with stored `shinsei_token`
+- **Interceptors**: `services/api.js` automatically attaches `Authorization: Bearer <shinsei_token>` to outgoing requests
 - **Wrapping**: `AuthProvider` wraps the entire `<App />` in `main.jsx`
-- **Usage**: Consumed via `useAuth()` hook in Header, Home, Settings, and Auth pages
+- **Usage**: Consumed via `useAuth()` hook in Header, Home, Settings, ProtectedRoutes, and Auth pages
 
 ---
 
@@ -341,7 +354,7 @@ Provides global authentication state via React Context API:
 ### Color Palette
 
 | Color | Hex | Usage |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | Cyan | `#00cfff` | Primary accent, EXP bars, default theme |
 | Purple | `#a78bfa` | Epic rarity, study stats, secondary accent |
 | Pink | `#fb7185` | Expense values, errors, fitness stats |
@@ -359,7 +372,7 @@ Users can select from 5 accent themes:
 ## 📜 Available Scripts
 
 | Script | Command | Description |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | **Dev** | `npm run dev` | Start Vite dev server with HMR |
 | **Build** | `npm run build` | Create optimized production bundle |
 | **Preview** | `npm run preview` | Preview production build locally |
@@ -371,16 +384,17 @@ Users can select from 5 accent themes:
 
 ### Runtime
 
-| Package | Version |
-|:---|:---|
-| `react` | `^19.2.0` |
-| `react-dom` | `^19.2.0` |
-| `react-router-dom` | `^7.10.0` |
+| Package | Version | Role |
+| :--- | :--- | :--- |
+| `react` | `^19.2.0` | UI framework |
+| `react-dom` | `^19.2.0` | DOM renderer & portal support |
+| `react-router-dom` | `^7.10.0` | Declarative routing & navigation |
+| `axios` | `^1.16.1` | REST API communication & token interceptors |
 
 ### Development
 
 | Package | Version |
-|:---|:---|
+| :--- | :--- |
 | `vite` | `^7.2.4` |
 | `@vitejs/plugin-react` | `^5.1.1` |
 | `eslint` | `^9.39.1` |
@@ -395,12 +409,10 @@ Users can select from 5 accent themes:
 
 ## 🔮 What's Next
 
-This frontend is designed to be **backend-ready**. The planned integration includes:
-
-- [ ] Replace `localStorage` auth with JWT-based authentication
-- [ ] Connect all data (quests, achievements, finance, stats) to REST API endpoints
-- [ ] Implement real-time data sync and persistence via PostgreSQL
-- [ ] Add loading states, error boundaries, and optimistic updates
+- [x] Integrate JWT-based authentication (`/api/auth/register`, `/api/auth/login`, `/api/auth/me`)
+- [x] Protected route redirection and token-based session persistence
+- [x] Connect live financial transactions to REST API endpoints (`/api/finance/transactions`)
+- [ ] Connect remaining modules (quests, daily logs, achievements) to live REST API
 - [ ] Progressive mobile responsiveness enhancements
 - [ ] Push notification integration for streak alerts and quest deadlines
 
